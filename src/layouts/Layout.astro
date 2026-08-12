@@ -68,11 +68,11 @@ const localBusiness = {
 		<meta name="theme-color" media="(prefers-color-scheme: light)" content={site.corTemaClaro} />
 		<meta name="theme-color" media="(prefers-color-scheme: dark)" content={site.corTemaEscuro} />
 
-		<link rel="icon" href="/favicon.ico" sizes="32x32" />
-		<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16" />
-		<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32" />
-		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-		<link rel="manifest" href="/site.webmanifest" />
+		<link rel="icon" href={`${import.meta.env.BASE_URL}favicon.ico`} sizes="32x32" />
+		<link rel="icon" type="image/png" href={`${import.meta.env.BASE_URL}favicon-16x16.png`} sizes="16x16" />
+		<link rel="icon" type="image/png" href={`${import.meta.env.BASE_URL}favicon-32x32.png`} sizes="32x32" />
+		<link rel="apple-touch-icon" href={`${import.meta.env.BASE_URL}apple-touch-icon.png`} />
+		<link rel="manifest" href={`${import.meta.env.BASE_URL}site.webmanifest`} />
 		<link rel="canonical" href={canonicalUrl} />
 		{noIndex && <meta name="robots" content="noindex, nofollow" />}
 
