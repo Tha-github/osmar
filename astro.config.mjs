@@ -11,7 +11,7 @@ export default defineConfig({
   // PROVISÓRIO — enquanto o domínio definitivo não é apontado, o site é
   // publicado no GitHub Pages sob /osmar/. Remover este `base` (e trocar
   // `site` para a raiz do domínio) quando o domínio definitivo estiver ativo.
-  base: '/osmar',
+  base: '/osmar/',
   integrations: [
     preact(),
     sitemap({
