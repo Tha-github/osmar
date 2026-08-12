@@ -1,0 +1,61 @@
+---
+/**
+ * Cartões de 1200x630 usados só para gerar as imagens de Open Graph via
+ * screenshot (ver scripts/gerar-og.mjs) — não são páginas de conteúdo.
+ * Ficam fora do sitemap e com noindex (ver astro.config.mjs e o robots).
+ */
+import '../../styles/global.css';
+import { empresa } from '../../data/empresa';
+
+export function getStaticPaths() {
+  return [
+    {
+      params: { slug: 'home' },
+      props: {
+        eyebrow: 'Cuiabá e região · energia solar',
+        titulo: 'A energia está aí em cima. A gente cuida do resto.',
+      },
+    },
+    {
+      params: { slug: 'manutencao' },
+      props: {
+        eyebrow: 'Monitoramento e manutenção',
+        titulo: 'Instalar é o começo. A maioria some depois disso.',
+      },
+    },
+    {
+      params: { slug: 'formas-de-pagamento' },
+      props: {
+        eyebrow: 'Formas de pagamento',
+        titulo: 'Quatro caminhos até o seu sistema.',
+      },
+    },
+  ];
+}
+
+const { eyebrow, titulo } = Astro.props;
+---
+
+<html lang="pt-BR">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="robots" content="noindex, nofollow" />
+		<title>OG</title>
+	</head>
+	<body class="m-0 p-0">
+		<div class="flex h-[630px] w-[1200px] flex-col justify-between bg-umbra p-16 text-dia">
+			<div class="flex items-center gap-4">
+				<svg width="48" height="48" viewBox="0 0 28 28" aria-hidden="true">
+					<circle cx="13" cy="14" r="10" fill="var(--coroa)"></circle>
+					<circle cx="17" cy="12" r="8.5" fill="currentColor"></circle>
+				</svg>
+				<span class="font-display text-display-md">{empresa.nome}</span>
+			</div>
+
+			<div>
+				<span class="font-mono text-mono uppercase tracking-widest text-luz">{eyebrow}</span>
+				<p class="font-display mt-4 text-display-2xl leading-[1.05]">{titulo}</p>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,210 @@
+---
+/**
+ * "Formas de pagamento" — usada tanto como seção da home (condensada)
+ * quanto como conteúdo integral da página /formas-de-pagamento (com
+ * headingLevel={1} e expandido={true}), mesmo padrão do Manutencao.astro.
+ *
+ * Grid assimétrico: coluna estreita (4/12) com as três modalidades comuns
+ * empilhadas em texto simples — sem borda, sem caixa, para não formar a
+ * fileira de cards iguais proibida em CLAUDE.md — e coluna larga (8/12,
+ * exatamente o dobro) com a compra programada em destaque sobre
+ * --penumbra, o contraste de eclipse dentro da seção clara.
+ *
+ * Elemento assinatura: a escada de contemplação, quatro anéis SVG
+ * concêntricos (mês 1 → 25% até mês 4 → 100%, o círculo fechado = eclipse
+ * total) que se preenchem com defasagem de 200ms ao entrar na viewport.
+ */
+import { empresa } from '../data/empresa';
+import { pagamentos } from '../data/pagamentos';
+import ParceirosFaixa from './ParceirosFaixa.astro';
+import Eyebrow from './Eyebrow.astro';
+
+interface Props {
+  headingLevel?: 1 | 2;
+  expandido?: boolean;
+}
+
+const { headingLevel = 2, expandido = false } = Astro.props;
+const TituloTag = `h${headingLevel}`;
+const ItemTag = `h${headingLevel + 1}`;
+
+const RAIO_INICIAL = 85;
+const RAIO_PASSO = 20;
+const ESPESSURA = 7;
+const VIEWBOX = 200;
+
+const aneis = pagamentos.escada.map((passo, indice) => {
+  const raio = RAIO_INICIAL - indice * RAIO_PASSO;
+  const circunferencia = 2 * Math.PI * raio;
+  const offsetAlvo = circunferencia * (1 - passo.percentual / 100);
+  return { ...passo, raio, circunferencia, offsetAlvo, indice };
+});
+
+const mensagemWhatsapp = encodeURIComponent(
+  'Olá! Vi as formas de pagamento no site da OZ Energia Solar e quero falar com um consultor.',
+);
+const whatsappHref = `https://wa.me/55${empresa.whatsapp}?text=${mensagemWhatsapp}`;
+---
+
+<section id="formas-de-pagamento" class="section-y bg-papel text-grafite">
+	<div class="mx-auto max-w-7xl px-6 md:px-10">
+		<div class="grid grid-cols-1 md:grid-cols-12">
+			<div class="md:col-span-9 md:col-start-3">
+				<Eyebrow>{pagamentos.eyebrow}</Eyebrow>
+				<TituloTag class="font-display mt-6 text-display-lg">{pagamentos.titulo}</TituloTag>
+			</div>
+		</div>
+
+		<div class="mt-16 grid grid-cols-1 gap-16 md:mt-20 md:grid-cols-12 md:gap-8">
+			<div class="flex flex-col gap-12 md:col-span-4">
+				{
+					pagamentos.modalidades.map((modalidade) => (
+						<div>
+							<span class="font-mono text-mono uppercase tracking-widest text-grafite/60">{modalidade.rotulo}</span>
+							<ItemTag class="font-display mt-2 text-display-md">{modalidade.titulo}</ItemTag>
+							<p class="mt-3 max-w-sm text-body text-grafite/70">{modalidade.texto}</p>
+							{expandido && <p class="mt-3 max-w-sm text-body text-grafite/70">{modalidade.textoExpandido}</p>}
+						</div>
+					))
+				}
+			</div>
+
+			<div class="md:col-span-8">
+				<div class="bg-penumbra px-6 py-10 text-dia md:px-10 md:py-12">
+					<ItemTag class="font-display text-display-md">{pagamentos.compraProgramada.titulo}</ItemTag>
+					<p class="mt-4 max-w-lg text-body text-dia/85">{pagamentos.compraProgramada.texto}</p>
+					{
+						expandido && (
+							<p class="mt-3 max-w-lg text-body text-dia/85">{pagamentos.compraProgramada.textoExpandido}</p>
+						)
+					}
+
+					<div
+						data-escada
+						class="mt-10 flex flex-col items-center gap-8 sm:flex-row sm:items-center sm:gap-12"
+					>
+						<div class="h-[220px] w-[220px] shrink-0">
+							<svg viewBox={`0 0 ${VIEWBOX} ${VIEWBOX}`} class="h-full w-full -rotate-90" aria-hidden="true">
+								{
+									aneis.map((anel) => (
+										<circle
+											cx={VIEWBOX / 2}
+											cy={VIEWBOX / 2}
+											r={anel.raio}
+											fill="none"
+											stroke="var(--dia)"
+											stroke-opacity="0.15"
+											stroke-width={ESPESSURA}
+										/>
+									))
+								}
+								{
+									aneis.map((anel) => (
+										<circle
+											cx={VIEWBOX / 2}
+											cy={VIEWBOX / 2}
+											r={anel.raio}
+											fill="none"
+											stroke="var(--coroa)"
+											stroke-width={ESPESSURA}
+											stroke-linecap="round"
+											stroke-dasharray={anel.circunferencia}
+											class="escada-arco"
+											style={`--circunferencia: ${anel.circunferencia}px; --offset-alvo: ${anel.offsetAlvo}px; --indice: ${anel.indice};`}
+										/>
+									))
+								}
+							</svg>
+						</div>
+
+						<ul class="flex flex-col gap-3">
+							{
+								aneis.map((anel) => (
+									<li
+										class="escada-legenda flex items-center gap-3 font-mono text-mono uppercase tracking-widest text-dia/80"
+										style={`--indice: ${anel.indice};`}
+									>
+										<span class="h-1.5 w-1.5 shrink-0 rounded-full bg-coroa" />
+										Mês {anel.mes} · {anel.percentual}%
+									</li>
+								))
+							}
+						</ul>
+					</div>
+				</div>
+
+				<p class="mt-4 max-w-lg text-mono text-grafite/70">{pagamentos.avisoLegal}</p>
+			</div>
+		</div>
+
+		<div class="mt-16 md:mt-20">
+			<a
+				href={whatsappHref}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="inline-block rounded-sm bg-coroa px-6 py-3 text-body-sm font-medium text-grafite transition hover:brightness-95"
+			>
+				{pagamentos.cta.label}
+			</a>
+		</div>
+
+		<ParceirosFaixa />
+	</div>
+</section>
+
+<style>
+	.escada-arco {
+		stroke-dashoffset: var(--circunferencia);
+		transition: stroke-dashoffset 900ms cubic-bezier(0.16, 1, 0.3, 1);
+		transition-delay: calc(var(--indice) * 200ms);
+	}
+
+	[data-escada][data-visivel='true'] .escada-arco {
+		stroke-dashoffset: var(--offset-alvo);
+	}
+
+	.escada-legenda {
+		opacity: 0;
+		transform: translateX(8px);
+		transition:
+			opacity 500ms ease,
+			transform 500ms ease;
+		transition-delay: calc(var(--indice) * 200ms);
+	}
+
+	[data-escada][data-visivel='true'] .escada-legenda {
+		opacity: 1;
+		transform: translateX(0);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.escada-arco {
+			transition: none;
+			stroke-dashoffset: var(--offset-alvo);
+		}
+
+		.escada-legenda {
+			transition: none;
+			opacity: 1;
+			transform: none;
+		}
+	}
+</style>
+
+<script>
+	const escadas = document.querySelectorAll('[data-escada]');
+
+	const observer = new IntersectionObserver(
+		(entries) => {
+			for (const entry of entries) {
+				if (entry.isIntersecting) {
+					(entry.target as HTMLElement).dataset.visivel = 'true';
+					observer.unobserve(entry.target);
+				}
+			}
+		},
+		{ threshold: 0.3 },
+	);
+
+	escadas.forEach((el) => observer.observe(el));
+</script>

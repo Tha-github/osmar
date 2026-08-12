@@ -1,0 +1,53 @@
+---
+import Eyebrow from './Eyebrow.astro';
+import { manutencao } from '../data/manutencao';
+
+/**
+ * headingLevel ajusta a hierarquia semântica: h1 quando a seção é o
+ * conteúdo principal da página /manutencao, h2 quando é uma seção dentro
+ * da home (que já tem seu próprio h1 no Hero). A cláusula sempre fica um
+ * nível abaixo do título da seção.
+ */
+interface Props {
+  headingLevel?: 1 | 2;
+}
+
+const { headingLevel = 2 } = Astro.props;
+const TituloTag = `h${headingLevel}`;
+const ClausulaTag = `h${headingLevel + 1}`;
+---
+
+<section id="manutencao" class="section-y bg-umbra text-dia">
+	<div class="mx-auto max-w-7xl px-6 md:px-10">
+		<div class="max-w-3xl">
+			<Eyebrow class="text-luz">{manutencao.eyebrow}</Eyebrow>
+			<TituloTag class="font-display mt-6 text-display-xl">{manutencao.titulo}</TituloTag>
+		</div>
+
+		<div class="mt-16 grid grid-cols-1 gap-x-12 gap-y-10 md:mt-20 md:grid-cols-2">
+			{
+				manutencao.itens.map((item) => (
+					<div>
+						<span class="font-mono text-mono uppercase tracking-widest text-dia/60">{item.rotulo}</span>
+						<p class="mt-3 max-w-md text-body text-dia/80">{item.texto}</p>
+					</div>
+				))
+			}
+		</div>
+
+		<div class="mt-16 max-w-2xl border-l-2 border-coroa bg-penumbra px-6 py-6 md:mt-20 md:px-8 md:py-8">
+			<span class="font-mono text-mono uppercase tracking-widest text-luz">{manutencao.clausula.numero}</span>
+			<ClausulaTag class="font-display mt-2 text-display-md">{manutencao.clausula.titulo}</ClausulaTag>
+			<p class="mt-4 text-body text-dia/85">{manutencao.clausula.texto}</p>
+		</div>
+
+		<div class="mt-12 md:mt-16">
+			<a
+				href={manutencao.cta.href}
+				class="inline-block rounded-sm bg-coroa px-6 py-3 text-body-sm font-medium text-grafite transition hover:brightness-95"
+			>
+				{manutencao.cta.label}
+			</a>
+		</div>
+	</div>
+</section>

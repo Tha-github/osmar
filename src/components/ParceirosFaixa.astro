@@ -1,0 +1,85 @@
+---
+/**
+ * Faixa de instituições parceiras — sinal de credibilidade discreto, não
+ * conteúdo. Fica dentro do MESMO <section> de FormasPagamento (ver uso em
+ * FormasPagamento.astro), sem ArcDivider entre os dois: são o mesmo
+ * assunto ("como eu pago isso" → "com quem eu posso financiar isso").
+ *
+ * Os logos são PNG (arquivos reais dos parceiros), não SVG — por isso a
+ * recoloração para --grafite usa `mask-image` em vez de `currentColor`:
+ * o PNG vira só uma máscara de alpha, e quem pinta a cor é
+ * `background-color`. Um <img src="logo.png"> comum não permite recolorir
+ * por fora; mask-image sim, porque não lê os pixels de cor, só a
+ * transparência.
+ */
+import { parceiros, parceirosTitulo } from '../data/parceiros';
+
+const arquivos = import.meta.glob('../assets/parceiros/*.png', {
+  query: '?url',
+  import: 'default',
+  eager: true,
+}) as Record<string, string>;
+
+function encontrarImagem(nomeArquivo: string): string {
+  const chave = Object.keys(arquivos).find((caminho) => caminho.endsWith(`/${nomeArquivo}`));
+  if (!chave) {
+    throw new Error(`Imagem não encontrada para "${nomeArquivo}" em src/assets/parceiros/`);
+  }
+  return arquivos[chave];
+}
+---
+
+<aside aria-label="Instituições financeiras parceiras" class="mt-10 md:mt-12">
+	<p class="text-center font-mono text-mono uppercase tracking-widest text-grafite/60">
+		{parceirosTitulo}
+	</p>
+
+	{/*
+		Breakpoint próprio em 480px (não é um dos padrões do Tailwind):
+		abaixo disso, grid de 2 colunas com o terceiro logo ocupando a
+		linha inteira (2 + 1, centralizado); a partir de 480px, 3 colunas
+		numa linha única. Determinístico por largura de tela, não por
+		"será que cabe".
+	*/}
+	<div class="mx-auto mt-6 grid w-fit grid-cols-[repeat(2,auto)] place-items-center gap-x-10 gap-y-6 min-[480px]:grid-cols-[repeat(3,auto)] min-[480px]:gap-x-14">
+		{
+			parceiros.map((parceiro, indice) => {
+				const urlImagem = encontrarImagem(parceiro.arquivo);
+				const largura = Math.round(parceiro.alturaOptica * parceiro.proporcao);
+				const conteudo = (
+					<span
+						role="img"
+						aria-label={parceiro.alt}
+						class="parceiro-logo inline-block bg-grafite opacity-55 transition-opacity duration-200 hover:opacity-100"
+						style={`height: ${parceiro.alturaOptica}px; width: ${largura}px; --logo-url: url(${urlImagem});`}
+					/>
+				);
+
+				return (
+					<div class:list={[indice === 2 ? 'col-span-2 min-[480px]:col-span-1' : '']}>
+						{parceiro.link ? (
+							<a href={parceiro.link} target="_blank" rel="noopener noreferrer" aria-label={parceiro.alt}>
+								{conteudo}
+							</a>
+						) : (
+							conteudo
+						)}
+					</div>
+				);
+			})
+		}
+	</div>
+</aside>
+
+<style>
+	.parceiro-logo {
+		-webkit-mask-image: var(--logo-url);
+		mask-image: var(--logo-url);
+		-webkit-mask-size: contain;
+		mask-size: contain;
+		-webkit-mask-repeat: no-repeat;
+		mask-repeat: no-repeat;
+		-webkit-mask-position: center;
+		mask-position: center;
+	}
+</style>

@@ -1,0 +1,169 @@
+---
+import Eyebrow from './Eyebrow.astro';
+import { empresa } from '../data/empresa';
+import { contato } from '../data/contato';
+
+function formatTelefone(numero: string) {
+  const digits = numero.replace(/\D/g, '');
+  return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+}
+
+const enderecoCompleto = `${empresa.endereco.logradouro}, ${empresa.endereco.bairro}, ${empresa.endereco.cidade} - ${empresa.endereco.estado}, ${empresa.endereco.cep}`;
+const mapaEmbedUrl = `https://www.google.com/maps?q=${encodeURIComponent(enderecoCompleto)}&output=embed`;
+---
+
+<section id="contato" class="section-y bg-papel text-grafite">
+	<div class="mx-auto max-w-7xl px-6 md:px-10">
+		<div class="grid grid-cols-1 gap-16 md:grid-cols-12 md:gap-8">
+			<div class="md:col-span-6">
+				<Eyebrow>{contato.eyebrow}</Eyebrow>
+				<h2 class="font-display mt-6 text-display-lg">{contato.titulo}</h2>
+				<p class="mt-4 text-body text-grafite/70">{contato.subtitulo}</p>
+
+				<form id="form-contato" class="mt-10 flex flex-col gap-5">
+					<div>
+						<label for="contato-nome" class="text-body-sm text-grafite/70">Nome</label>
+						<input
+							id="contato-nome"
+							name="nome"
+							type="text"
+							required
+							class="mt-1 w-full border border-grafite/20 bg-transparent px-3 py-2 text-body-sm text-grafite"
+						/>
+					</div>
+					<div>
+						<label for="contato-email" class="text-body-sm text-grafite/70">E-mail</label>
+						<input
+							id="contato-email"
+							name="email"
+							type="email"
+							class="mt-1 w-full border border-grafite/20 bg-transparent px-3 py-2 text-body-sm text-grafite"
+						/>
+					</div>
+					<div>
+						<label for="contato-whatsapp" class="text-body-sm text-grafite/70">WhatsApp</label>
+						<input
+							id="contato-whatsapp"
+							name="whatsapp"
+							type="tel"
+							required
+							placeholder="(65) 90000-0000"
+							class="mt-1 w-full border border-grafite/20 bg-transparent px-3 py-2 text-body-sm text-grafite"
+						/>
+					</div>
+					<div>
+						<label for="contato-mensagem" class="text-body-sm text-grafite/70">Mensagem</label>
+						<textarea
+							id="contato-mensagem"
+							name="mensagem"
+							rows="4"
+							class="mt-1 w-full border border-grafite/20 bg-transparent px-3 py-2 text-body-sm text-grafite"
+						></textarea>
+					</div>
+					<button
+						type="submit"
+						class="mt-2 inline-flex w-fit rounded-sm bg-coroa px-6 py-3 text-body-sm font-medium text-grafite transition hover:brightness-95"
+					>
+						{contato.ctaEnviar}
+					</button>
+				</form>
+			</div>
+
+			<div class="md:col-span-5 md:col-start-8">
+				<Eyebrow>Endereço</Eyebrow>
+				<p class="mt-4 text-body text-grafite/70">
+					{empresa.endereco.logradouro}<br />
+					{empresa.endereco.bairro} — {empresa.endereco.cidade}/{empresa.endereco.estado}<br />
+					CEP {empresa.endereco.cep}
+				</p>
+
+				<p class="mt-6 text-body text-grafite/70">
+					<a href={`tel:+55${empresa.telefone}`} class="hover:text-coroa">{formatTelefone(empresa.telefone)}</a
+					><br />
+					<a href={`mailto:${empresa.email}`} class="hover:text-coroa">{empresa.email}</a>
+				</p>
+
+				<p class="mt-6 text-body text-grafite/70">{empresa.horarioFuncionamento}</p>
+
+				<div class="mt-8">
+					<button
+						type="button"
+						id="mapa-toggle"
+						class="group relative block aspect-4/3 w-full overflow-hidden border border-grafite/15 bg-grafite/[0.03] text-left"
+						aria-label={`${contato.ctaMapa} — localização da ${empresa.nome}`}
+					>
+						<svg class="absolute inset-0 h-full w-full text-grafite/10" aria-hidden="true">
+							<defs>
+								<pattern id="grade-mapa" width="24" height="24" patternUnits="userSpaceOnUse">
+									<path d="M24 0H0V24" fill="none" stroke="currentColor" stroke-width="1"></path>
+								</pattern>
+							</defs>
+							<rect width="100%" height="100%" fill="url(#grade-mapa)"></rect>
+						</svg>
+
+						<span class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+							<svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+								<circle cx="14" cy="14" r="9" stroke="var(--coroa)" stroke-width="1.5"></circle>
+								<line x1="14" y1="0.5" x2="14" y2="6" stroke="var(--coroa)" stroke-width="1.5"></line>
+								<line x1="14" y1="22" x2="14" y2="27.5" stroke="var(--coroa)" stroke-width="1.5"></line>
+								<line x1="0.5" y1="14" x2="6" y2="14" stroke="var(--coroa)" stroke-width="1.5"></line>
+								<line x1="22" y1="14" x2="27.5" y2="14" stroke="var(--coroa)" stroke-width="1.5"></line>
+								<circle cx="14" cy="14" r="1.5" fill="var(--coroa)"></circle>
+							</svg>
+						</span>
+
+						<span
+							class="absolute bottom-4 left-4 font-mono text-mono uppercase tracking-widest text-grafite/60 transition-colors group-hover:text-coroa"
+						>
+							{contato.ctaMapa}
+						</span>
+					</button>
+
+					<div id="mapa-iframe-wrap" class="hidden aspect-4/3 w-full">
+						<iframe
+							id="mapa-iframe"
+							class="h-full w-full border-0"
+							title={`Mapa com a localização da ${empresa.nome}`}
+							loading="lazy"
+							data-src={mapaEmbedUrl}></iframe>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script define:vars={{ whatsappOz: empresa.whatsapp }}>
+	const botaoMapa = document.getElementById('mapa-toggle');
+	const wrapMapa = document.getElementById('mapa-iframe-wrap');
+	const iframeMapa = document.getElementById('mapa-iframe');
+
+	botaoMapa?.addEventListener('click', () => {
+		const src = iframeMapa?.dataset.src;
+		if (iframeMapa && src) iframeMapa.src = src;
+		botaoMapa.classList.add('hidden');
+		wrapMapa?.classList.remove('hidden');
+	});
+
+	const formulario = document.getElementById('form-contato');
+	formulario?.addEventListener('submit', (evento) => {
+		evento.preventDefault();
+		const dados = new FormData(formulario);
+		const nome = String(dados.get('nome') ?? '').trim();
+		const email = String(dados.get('email') ?? '').trim();
+		const whatsappCliente = String(dados.get('whatsapp') ?? '').trim();
+		const mensagem = String(dados.get('mensagem') ?? '').trim();
+
+		const linhas = [
+			'Olá! Vim pelo site da OZ Energia Solar.',
+			'',
+			`Nome: ${nome}`,
+			`WhatsApp para contato: ${whatsappCliente}`,
+		];
+		if (email) linhas.push(`E-mail: ${email}`);
+		if (mensagem) linhas.push('', mensagem);
+
+		const link = `https://wa.me/55${whatsappOz}?text=${encodeURIComponent(linhas.join('\n'))}`;
+		window.open(link, '_blank', 'noopener,noreferrer');
+	});
+</script>

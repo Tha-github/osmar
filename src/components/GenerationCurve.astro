@@ -1,0 +1,151 @@
+---
+/**
+ * Curva de geração diária de um sistema fotovoltaico em Cuiabá: nascer do sol
+ * às 6h, pico às 12h30, pôr do sol às 18h. Puramente decorativo — sem
+ * interatividade, sem tooltip. Os pontos são calculados aqui (não são um
+ * desenho livre) para que o comprimento do traçado usado no
+ * stroke-dasharray seja exato.
+ */
+const PICO_KW = 6.2;
+const HORA_NASCER = 6;
+const HORA_PICO = 12.5;
+const HORA_POR = 18;
+const PASSO_HORAS = 0.25;
+
+const LARGURA_VB = 800;
+const ALTURA_VB = 300;
+const Y_BASE = 280;
+const Y_TOPO = 30;
+
+function potenciaEm(hora: number): number {
+  if (hora <= HORA_PICO) {
+    const fase = ((hora - HORA_NASCER) / (HORA_PICO - HORA_NASCER)) * (Math.PI / 2);
+    return PICO_KW * Math.sin(fase);
+  }
+  const fase = ((hora - HORA_PICO) / (HORA_POR - HORA_PICO)) * (Math.PI / 2);
+  return PICO_KW * Math.cos(fase);
+}
+
+function paraX(hora: number) {
+  return ((hora - HORA_NASCER) / (HORA_POR - HORA_NASCER)) * LARGURA_VB;
+}
+
+function paraY(potencia: number) {
+  return Y_BASE - (potencia / PICO_KW) * (Y_BASE - Y_TOPO);
+}
+
+const pontos: { x: number; y: number }[] = [];
+for (let hora = HORA_NASCER; hora <= HORA_POR + 1e-9; hora += PASSO_HORAS) {
+  pontos.push({ x: paraX(hora), y: paraY(potenciaEm(hora)) });
+}
+
+const pontosTexto = pontos.map((pt) => `${pt.x.toFixed(1)},${pt.y.toFixed(1)}`);
+const linhaPath = `M ${pontosTexto[0]} L ${pontosTexto.slice(1).join(' L ')}`;
+const areaPath = `M ${pontos[0].x.toFixed(1)},${Y_BASE} L ${pontosTexto.join(' L ')} L ${pontos[pontos.length - 1].x.toFixed(1)},${Y_BASE} Z`;
+
+let comprimentoLinha = 0;
+for (let i = 1; i < pontos.length; i++) {
+  const dx = pontos[i].x - pontos[i - 1].x;
+  const dy = pontos[i].y - pontos[i - 1].y;
+  comprimentoLinha += Math.sqrt(dx * dx + dy * dy);
+}
+
+const horasEixo = [6, 9, 12, 15, 18];
+const picoXPercentual = (paraX(HORA_PICO) / LARGURA_VB) * 100;
+const picoYPercentual = (Y_TOPO / ALTURA_VB) * 100;
+const picoLabel = `Pico ${PICO_KW.toFixed(1).replace('.', ',')} kW às 12h30`;
+---
+
+<div class="w-full">
+	<div class="relative h-[180px] w-full md:h-[420px]">
+		<svg
+			viewBox={`0 0 ${LARGURA_VB} ${ALTURA_VB}`}
+			preserveAspectRatio="none"
+			class="h-full w-full"
+			role="img"
+			aria-label={`Curva de geração diária de um sistema fotovoltaico em Cuiabá, do nascer ao pôr do sol, com ${picoLabel.toLowerCase()}.`}
+		>
+			<defs>
+				<linearGradient id="curva-gradiente" x1="0" y1="0" x2="0" y2="1">
+					<stop offset="0%" stop-color="var(--coroa)" stop-opacity="0.45"></stop>
+					<stop offset="100%" stop-color="var(--coroa)" stop-opacity="0"></stop>
+				</linearGradient>
+			</defs>
+
+			<line
+				x1="0"
+				y1={Y_BASE}
+				x2={LARGURA_VB}
+				y2={Y_BASE}
+				stroke="var(--penumbra)"
+				stroke-width="1"
+				vector-effect="non-scaling-stroke"></line>
+
+			<path d={areaPath} fill="url(#curva-gradiente)" class="curva-area"></path>
+
+			<path
+				d={linhaPath}
+				fill="none"
+				stroke="var(--coroa)"
+				stroke-width="1.5"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				vector-effect="non-scaling-stroke"
+				class="curva-linha"
+				style={`stroke-dasharray: ${comprimentoLinha.toFixed(1)}; stroke-dashoffset: ${comprimentoLinha.toFixed(1)};`}
+			></path>
+		</svg>
+
+		<span
+			aria-hidden="true"
+			class="absolute h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-coroa"
+			style={`left: ${picoXPercentual.toFixed(2)}%; top: ${picoYPercentual.toFixed(2)}%;`}
+		></span>
+		<span
+			aria-hidden="true"
+			class="absolute -translate-x-1/2 whitespace-nowrap font-mono text-mono uppercase tracking-widest text-luz"
+			style={`left: ${picoXPercentual.toFixed(2)}%; top: calc(${picoYPercentual.toFixed(2)}% - 1.4rem);`}
+		>
+			{picoLabel}
+		</span>
+	</div>
+
+	<div class="mt-3 flex justify-between font-mono text-mono uppercase tracking-widest text-dia/60">
+		{horasEixo.map((hora) => <span>{hora.toString().padStart(2, '0')}h</span>)}
+	</div>
+</div>
+
+<style>
+	.curva-linha {
+		animation: desenhar-curva 1400ms ease-out forwards;
+	}
+
+	.curva-area {
+		opacity: 0;
+		animation: preencher-area 900ms ease-out 400ms forwards;
+	}
+
+	@keyframes desenhar-curva {
+		to {
+			stroke-dashoffset: 0;
+		}
+	}
+
+	@keyframes preencher-area {
+		to {
+			opacity: 1;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.curva-linha {
+			animation: none;
+			stroke-dashoffset: 0;
+		}
+
+		.curva-area {
+			animation: none;
+			opacity: 1;
+		}
+	}
+</style>

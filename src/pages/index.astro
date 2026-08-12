@@ -1,0 +1,34 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import SimuladorEconomia from '../components/SimuladorEconomia';
+import FormasPagamento from '../components/FormasPagamento.astro';
+import GarantiaFaixa from '../components/GarantiaFaixa.astro';
+import Argumentos from '../components/Argumentos.astro';
+import ParaQuem from '../components/ParaQuem.astro';
+import ComoFunciona from '../components/ComoFunciona.astro';
+import Manutencao from '../components/Manutencao.astro';
+import Sobre from '../components/Sobre.astro';
+import Faq from '../components/Faq.astro';
+import Contato from '../components/Contato.astro';
+---
+
+<Layout
+	title="Instalação de energia solar em Cuiabá | OZ Energia Solar"
+	description="Projeto, instalação, monitoramento e manutenção de energia solar em Cuiabá e região — com garantia contratual de geração. Simule sua economia agora."
+	ogImage="/og/home.png"
+>
+	<main>
+		<Hero />
+		<SimuladorEconomia client:visible />
+		<FormasPagamento />
+		<GarantiaFaixa />
+		<Argumentos />
+		<ParaQuem />
+		<ComoFunciona />
+		<Manutencao />
+		<Sobre />
+		<Faq />
+		<Contato />
+	</main>
+</Layout>

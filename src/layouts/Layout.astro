@@ -1,0 +1,113 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppFlutuante from '../components/WhatsAppFlutuante.astro';
+import { empresa } from '../data/empresa';
+import { site } from '../data/site';
+
+// Import com `?url` resolve para a URL final (já com hash de build) do
+// mesmo arquivo que o @font-face do fontsource vai carregar — assim o
+// preload sempre aponta pro arquivo certo, mesmo quando o hash mudar.
+import archivoLatinUrl from '@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2?url';
+import instrumentSansLatinUrl from '@fontsource-variable/instrument-sans/files/instrument-sans-latin-wght-normal.woff2?url';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Caminho absoluto a partir da raiz, ex.: '/og/home.png'. */
+  ogImage?: string;
+  noIndex?: boolean;
+}
+
+const { title, description, ogImage = '/og/home.png', noIndex = false } = Astro.props;
+
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+const ogImageUrl = new URL(ogImage, Astro.site);
+
+const localBusiness = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  '@id': `${site.url}/#negocio`,
+  name: empresa.nome,
+  image: new URL('/og/home.png', Astro.site).toString(),
+  telephone: `+55${empresa.telefone}`,
+  email: empresa.email,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: empresa.endereco.logradouro,
+    addressLocality: empresa.endereco.cidade,
+    addressRegion: empresa.endereco.estado,
+    postalCode: empresa.endereco.cep,
+    addressCountry: empresa.endereco.pais,
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: empresa.geo.latitude,
+    longitude: empresa.geo.longitude,
+  },
+  areaServed: empresa.regiaoAtendida,
+  openingHoursSpecification: {
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: empresa.horario.dias,
+    opens: empresa.horario.abre,
+    closes: empresa.horario.fecha,
+  },
+  url: site.url,
+  sameAs: [
+    `https://instagram.com/${empresa.redesSociais.instagram.replace('@', '')}`,
+    `https://facebook.com/${empresa.redesSociais.facebook.replace('@', '')}`,
+  ],
+};
+---
+
+<html lang="pt-BR">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" media="(prefers-color-scheme: light)" content={site.corTemaClaro} />
+		<meta name="theme-color" media="(prefers-color-scheme: dark)" content={site.corTemaEscuro} />
+
+		<link rel="icon" href="/favicon.ico" sizes="32x32" />
+		<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16" />
+		<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		<link rel="manifest" href="/site.webmanifest" />
+		<link rel="canonical" href={canonicalUrl} />
+		{noIndex && <meta name="robots" content="noindex, nofollow" />}
+
+		<!-- Preload das fontes usadas acima da dobra em toda página (hero/título). -->
+		<link rel="preload" as="font" type="font/woff2" href={archivoLatinUrl} crossorigin="anonymous" />
+		<link rel="preload" as="font" type="font/woff2" href={instrumentSansLatinUrl} crossorigin="anonymous" />
+
+		<meta name="generator" content={Astro.generator} />
+
+		<title>{title}</title>
+		<meta name="description" content={description} />
+
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content={empresa.nome} />
+		<meta property="og:locale" content="pt_BR" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonicalUrl} />
+		<meta property="og:image" content={ogImageUrl} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImageUrl} />
+
+		<script type="application/ld+json" set:html={JSON.stringify(localBusiness)} />
+
+		<slot name="head" />
+	</head>
+	<body>
+		<Header />
+		<slot />
+		<Footer />
+		<WhatsAppFlutuante />
+	</body>
+</html>

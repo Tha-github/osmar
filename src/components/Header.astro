@@ -1,0 +1,163 @@
+---
+import { navPrincipal, ctaPrincipal } from '../data/navegacao';
+import { empresa } from '../data/empresa';
+---
+
+<header
+	id="site-header"
+	data-scrolled="false"
+	class="group fixed inset-x-0 top-0 z-50 text-dia transition-colors duration-200 data-[scrolled=true]:bg-papel data-[scrolled=true]:text-grafite data-[scrolled=true]:shadow-xs"
+>
+	<div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 md:px-10">
+		<a href="/" class="inline-flex items-center gap-3" aria-label={`${empresa.nome} — página inicial`}>
+			<img src="/android-chrome-192x192.png" width="32" height="32" alt="" class="h-8 w-8 shrink-0" />
+			<span class="font-display text-body-lg leading-none">{empresa.nome}</span>
+		</a>
+
+		<nav aria-label="Navegação principal" class="hidden items-center gap-8 md:flex">
+			{
+				navPrincipal.map((item) => (
+					<a href={item.href} class="text-body-sm transition-colors hover:text-coroa">
+						{item.label}
+					</a>
+				))
+			}
+			<a
+				href={ctaPrincipal.href}
+				class="rounded-sm border border-dia/40 px-5 py-2.5 text-body-sm font-medium text-dia transition hover:border-coroa hover:text-coroa group-data-[scrolled=true]:border-grafite/30 group-data-[scrolled=true]:text-grafite"
+			>
+				{ctaPrincipal.label}
+			</a>
+		</nav>
+
+		<button
+			id="menu-toggle"
+			type="button"
+			class="inline-flex items-center justify-center md:hidden"
+			aria-expanded="false"
+			aria-controls="mobile-menu"
+			aria-label="Abrir menu"
+		>
+			<svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+				<line x1="3" y1="7" x2="21" y2="7" stroke="currentColor" stroke-width="1.5"></line>
+				<line x1="3" y1="17" x2="21" y2="17" stroke="currentColor" stroke-width="1.5"></line>
+			</svg>
+		</button>
+	</div>
+</header>
+
+<div
+	id="mobile-menu"
+	data-open="false"
+	class="fixed inset-0 z-50 hidden flex-col bg-umbra text-dia data-[open=true]:flex"
+	role="dialog"
+	aria-modal="true"
+	aria-label="Menu de navegação"
+>
+	<div class="flex items-center justify-between px-6 py-4">
+		<span class="font-mono text-mono uppercase tracking-widest">Menu</span>
+		<button id="menu-close" type="button" aria-label="Fechar menu" class="inline-flex items-center justify-center">
+			<svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+				<line x1="5" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="1.5"></line>
+				<line x1="19" y1="5" x2="5" y2="19" stroke="currentColor" stroke-width="1.5"></line>
+			</svg>
+		</button>
+	</div>
+
+	<nav aria-label="Navegação mobile" class="flex flex-1 flex-col justify-center px-6">
+		<ul class="flex flex-col gap-2">
+			{
+				navPrincipal.map((item, index) => (
+					<li data-menu-item style={`--stagger-index: ${index}`}>
+						<a href={item.href} class="font-display text-display-md">
+							{item.label}
+						</a>
+					</li>
+				))
+			}
+		</ul>
+		<a
+			href={ctaPrincipal.href}
+			data-menu-item
+			style={`--stagger-index: ${navPrincipal.length}`}
+			class="mt-8 inline-flex w-fit rounded-sm bg-coroa px-5 py-3 text-body-sm font-medium text-grafite"
+		>
+			{ctaPrincipal.label}
+		</a>
+	</nav>
+</div>
+
+<style>
+	#mobile-menu [data-menu-item] {
+		opacity: 0;
+		transform: translateY(12px);
+		transition:
+			opacity 300ms ease,
+			transform 300ms ease;
+		transition-delay: calc(var(--stagger-index, 0) * 40ms);
+	}
+
+	#mobile-menu[data-open='true'] [data-menu-item] {
+		opacity: 1;
+		transform: translateY(0);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		#mobile-menu [data-menu-item] {
+			transition: none;
+			transform: none;
+		}
+	}
+</style>
+
+<script>
+	const header = document.getElementById('site-header');
+	const toggle = document.getElementById('menu-toggle');
+	const menu = document.getElementById('mobile-menu');
+	const closeBtn = document.getElementById('menu-close');
+
+	const SCROLL_THRESHOLD = 8;
+
+	function updateHeaderState() {
+		if (!header) return;
+		header.dataset.scrolled = window.scrollY > SCROLL_THRESHOLD ? 'true' : 'false';
+	}
+
+	updateHeaderState();
+	window.addEventListener('scroll', updateHeaderState, { passive: true });
+
+	function openMenu() {
+		if (!menu || !toggle) return;
+		menu.dataset.open = 'true';
+		toggle.setAttribute('aria-expanded', 'true');
+		document.body.style.overflow = 'hidden';
+		closeBtn?.focus();
+	}
+
+	function closeMenu() {
+		if (!menu || !toggle) return;
+		menu.dataset.open = 'false';
+		toggle.setAttribute('aria-expanded', 'false');
+		document.body.style.overflow = '';
+		toggle.focus();
+	}
+
+	toggle?.addEventListener('click', () => {
+		const isOpen = menu?.dataset.open === 'true';
+		if (isOpen) {
+			closeMenu();
+		} else {
+			openMenu();
+		}
+	});
+
+	closeBtn?.addEventListener('click', closeMenu);
+
+	menu?.addEventListener('keydown', (event) => {
+		if (event.key === 'Escape') closeMenu();
+	});
+
+	menu?.querySelectorAll('a').forEach((link) => {
+		link.addEventListener('click', closeMenu);
+	});
+</script>

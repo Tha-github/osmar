@@ -1,0 +1,20 @@
+---
+/**
+ * Link com sublinhado que cresce do centro para as bordas ao passar o mouse
+ * (scaleX 0 → 1 com transform-origin center), em vez do sublinhado padrão.
+ */
+interface Props {
+  href: string;
+  class?: string;
+}
+
+const { href, class: className = '' } = Astro.props;
+---
+
+<a href={href} class:list={['group relative inline-block text-body-sm font-medium', className]}>
+	<slot />
+	<span
+		aria-hidden="true"
+		class="absolute inset-x-0 -bottom-0.5 h-px origin-center scale-x-0 bg-coroa transition-transform duration-300 ease-out group-hover:scale-x-100"
+	></span>
+</a>

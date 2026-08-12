@@ -1,0 +1,16 @@
+---
+/**
+ * Rótulo em Martian Mono, caixa alta, tracking largo. Usado como eyebrow
+ * acima de títulos de seção, e também serve para unidades e rótulos técnicos.
+ */
+interface Props {
+  as?: 'p' | 'span' | 'div';
+  class?: string;
+}
+
+const { as: Tag = 'p', class: className = '' } = Astro.props;
+---
+
+<Tag class:list={['font-mono text-mono uppercase tracking-widest', className]}>
+	<slot />
+</Tag>

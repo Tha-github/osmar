@@ -1,0 +1,17 @@
+/*
+  Tokens de cor — OZ Energia Solar.
+  Única fonte de verdade. Nenhuma cor fora desta paleta deve ser usada no projeto.
+  Ver CLAUDE.md > Tokens de Design.
+*/
+:root {
+  /* Preto quase puro, não #000 literal (proibido em "Proibições
+     Absolutas") — mesmo valor que o Material Design usa como "preto" de
+     tela para evitar o esmaecimento visual do #000 puro. */
+  --umbra: #121212; /* fundo escuro principal */
+  --penumbra: #262626; /* fundo escuro secundário */
+  --dia: #edeae3; /* texto sobre escuro */
+  --papel: #f7f5f0; /* fundo claro principal */
+  --grafite: #14141c; /* texto sobre claro */
+  --coroa: #fd7018; /* laranja de acento */
+  --luz: #ffe9b0; /* âmbar suave */
+}

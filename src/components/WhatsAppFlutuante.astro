@@ -1,0 +1,32 @@
+---
+/**
+ * Botão flutuante de WhatsApp, deliberadamente discreto: sem balão verde,
+ * sem preenchimento de destaque — só um ícone monoline (o mesmo traço fino
+ * usado nos ícones do rodapé) sobre um fundo neutro escuro.
+ */
+import { empresa } from '../data/empresa';
+
+const mensagem = encodeURIComponent('Olá! Vim pelo site da OZ Energia Solar.');
+const href = `https://wa.me/55${empresa.whatsapp}?text=${mensagem}`;
+---
+
+<a
+	href={href}
+	target="_blank"
+	rel="noopener noreferrer"
+	aria-label="Falar no WhatsApp com a OZ Energia Solar"
+	class="fixed bottom-6 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-grafite text-dia shadow-sm transition hover:bg-umbra"
+>
+	<svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+		<path
+			d="M4 21l1.3-4.1A8.5 8.5 0 1 1 8.9 20L4 21Z"
+			stroke="currentColor"
+			stroke-width="1.5"
+			stroke-linejoin="round"></path>
+		<path
+			d="M8.5 9.8c0 3.6 2.9 6.2 6.2 6.2"
+			stroke="currentColor"
+			stroke-width="1.5"
+			stroke-linecap="round"></path>
+	</svg>
+</a>

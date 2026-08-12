@@ -1,0 +1,28 @@
+---
+/**
+ * Título de seção em Archivo (display). O eyebrow opcional entra pelo slot
+ * nomeado "eyebrow" — normalmente um <Eyebrow />.
+ */
+interface Props {
+  level?: 2 | 3 | 4 | 5 | 6;
+  size?: '2xl' | 'xl' | 'lg' | 'md';
+  class?: string;
+}
+
+const { level = 2, size = 'lg', class: className = '' } = Astro.props;
+const Tag = `h${level}`;
+
+const sizeClass = {
+  '2xl': 'text-display-2xl',
+  xl: 'text-display-xl',
+  lg: 'text-display-lg',
+  md: 'text-display-md',
+}[size];
+---
+
+<header class:list={['flex flex-col gap-3', className]}>
+	<slot name="eyebrow" />
+	<Tag class:list={['font-display', sizeClass]}>
+		<slot />
+	</Tag>
+</header>

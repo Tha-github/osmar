@@ -1,0 +1,25 @@
+---
+/**
+ * Divisor de seção: arco SVG de 1px que atravessa toda a largura do
+ * contêiner. O raio é propositalmente enorme (sagita de 16px sobre 1440px
+ * de corda) para o arco parecer quase reto — nunca uma linha reta de fato.
+ */
+interface Props {
+  class?: string;
+  opacity?: number;
+}
+
+const { class: className = '', opacity = 1 } = Astro.props;
+---
+
+<div class:list={['w-full overflow-hidden', className]} role="presentation" aria-hidden="true">
+	<svg viewBox="0 0 1440 32" preserveAspectRatio="none" class="block h-8 w-full" fill="none">
+		<path
+			d="M0,16 Q720,0 1440,16"
+			stroke="var(--coroa)"
+			stroke-width="1"
+			opacity={opacity}
+			vector-effect="non-scaling-stroke"
+		></path>
+	</svg>
+</div>
