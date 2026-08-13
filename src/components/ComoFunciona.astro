@@ -9,14 +9,13 @@
  * fundo claro do site dá só ~2:1 de contraste, abaixo do mínimo AA de 4.5:1
  * (achado real ao rodar Lighthouse).
  *
- * Foto reaproveitada de src/assets/para-quem/ (a seção "Como funciona" não
- * é ligada a um segmento específico, então usa a mesma imagem residencial
- * já tratada/otimizada em vez de pedir um novo arquivo).
+ * Foto: equipe instalando o sistema, coerente com o passo 4 (Instalação
+ * rápida) e com o restante do texto da seção.
  */
 import { Image } from 'astro:assets';
 import { comoFunciona } from '../data/comoFunciona';
 import { linkWhatsapp, mensagemSecao } from '../lib/whatsapp';
-import fotoInstalacao from '../assets/para-quem/residencial.jpg';
+import fotoInstalacao from '../assets/para-quem/instalacao.png';
 
 const whatsappHref = linkWhatsapp(mensagemSecao('Como funciona'));
 ---
@@ -56,12 +55,12 @@ const whatsappHref = linkWhatsapp(mensagemSecao('Como funciona'));
 			</div>
 
 			<div class="md:col-span-5">
-				<div class="relative aspect-4/3 w-full overflow-hidden bg-grafite/5 md:aspect-auto md:h-full md:min-h-[420px]">
+				<div class="relative aspect-4/3 w-full overflow-hidden bg-grafite/5">
 					<Image
 						src={fotoInstalacao}
-						alt="Sistema fotovoltaico instalado e em operação no telhado de uma residência"
+						alt="Equipe técnica instalando painéis solares no telhado de um imóvel"
 						width={800}
-						height={800}
+						height={600}
 						loading="lazy"
 						format="avif"
 						class="h-full w-full object-cover"
