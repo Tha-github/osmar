@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import SectionHeading from './SectionHeading.astro';
 import LinkSublinhado from './LinkSublinhado.astro';
 import { paraQuem } from '../data/paraQuem';
+import { linkWhatsapp } from '../lib/whatsapp';
 
 import fotoResidencial from '../assets/para-quem/residencial.jpg';
 import fotoEmpresarial from '../assets/para-quem/empresas.jpg';
@@ -49,7 +50,12 @@ const fotos = [fotoResidencial, fotoEmpresarial, fotoRural, fotoCondominios];
 							<h3 class="font-display mt-3 text-display-md">{item.titulo}</h3>
 							<p class="mx-auto mt-4 max-w-md text-body text-grafite/70 md:mx-0">{item.paragrafos[0]}</p>
 							<p class="mx-auto mt-3 max-w-md text-body text-grafite/70 md:mx-0">{item.paragrafos[1]}</p>
-							<LinkSublinhado href={item.link.href} class="mt-6 text-grafite">
+							<LinkSublinhado
+								href={linkWhatsapp(`Olá! Quero saber mais sobre instalação de energia solar em ${item.link.mensagem}.`)}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="mt-6 text-grafite"
+							>
 								{item.link.label}
 							</LinkSublinhado>
 						</div>
