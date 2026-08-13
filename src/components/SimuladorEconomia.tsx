@@ -147,13 +147,17 @@ export default function SimuladorEconomia() {
     <section id="simulador" class="section-y bg-papel text-grafite">
       <div class="mx-auto max-w-7xl px-6 md:px-10">
         <div class="grid grid-cols-1 gap-12 md:grid-cols-12 md:gap-8">
-          <div class="md:col-span-5">
+          <div class="text-center md:col-span-5 md:text-left">
             <span class="font-mono text-mono uppercase tracking-widest text-grafite/60">Simulador</span>
             <h2 class="font-display mt-3 text-display-lg">Quanto você pode economizar?</h2>
 
             <div class="mt-10">
               <span class="font-mono text-mono uppercase tracking-widest text-grafite/60">Unidade</span>
-              <div role="group" aria-label="Unidade de entrada" class="mt-4 flex flex-wrap gap-x-6 gap-y-2">
+              <div
+                role="group"
+                aria-label="Unidade de entrada"
+                class="mt-4 flex flex-wrap justify-center gap-x-6 gap-y-2 md:justify-start"
+              >
                 <button
                   type="button"
                   aria-pressed={unidade === 'reais'}
@@ -219,7 +223,7 @@ export default function SimuladorEconomia() {
                   step={VALOR_CONTA_PASSO}
                   value={valorConta}
                   onInput={(e) => aoMudarValorConta(lerNumeroDoInput(e))}
-                  class="mt-2 w-36 border border-grafite/20 bg-transparent px-3 py-2 text-body-sm text-grafite"
+                  class="mx-auto mt-2 w-36 border border-grafite/20 bg-transparent px-3 py-2 text-body-sm text-grafite md:mx-0"
                 />
               </div>
             ) : (
@@ -263,14 +267,18 @@ export default function SimuladorEconomia() {
                   step={CONSUMO_KWH_PASSO}
                   value={Math.round(consumoKwhExibido)}
                   onInput={(e) => aoMudarConsumoKwh(lerNumeroDoInput(e))}
-                  class="mt-2 w-36 border border-grafite/20 bg-transparent px-3 py-2 text-body-sm text-grafite"
+                  class="mx-auto mt-2 w-36 border border-grafite/20 bg-transparent px-3 py-2 text-body-sm text-grafite md:mx-0"
                 />
               </div>
             )}
 
             <div class="mt-10">
               <span class="font-mono text-mono uppercase tracking-widest text-grafite/60">Tipo de imóvel</span>
-              <div role="group" aria-label="Tipo de imóvel" class="mt-4 flex flex-wrap gap-x-6 gap-y-2">
+              <div
+                role="group"
+                aria-label="Tipo de imóvel"
+                class="mt-4 flex flex-wrap justify-center gap-x-6 gap-y-2 md:justify-start"
+              >
                 {TIPOS_IMOVEL.map((tipo) => (
                   <button
                     type="button"
@@ -290,7 +298,7 @@ export default function SimuladorEconomia() {
             </div>
           </div>
 
-          <div class="md:col-span-6 md:col-start-7">
+          <div class="text-center md:col-span-6 md:col-start-7 md:text-left">
             <div class="border-l-2 border-coroa bg-grafite/[0.03] px-6 py-8 md:px-8">
               <div class="grid grid-cols-1 gap-y-8">
                 <div>
@@ -345,7 +353,7 @@ export default function SimuladorEconomia() {
                   Receber proposta detalhada
                 </button>
               ) : (
-                <div class="max-w-md">
+                <div class="mx-auto max-w-md text-left md:mx-0">
                   <div class="flex flex-col gap-4">
                     <div>
                       <label for="campo-nome" class="text-body-sm text-grafite/70">

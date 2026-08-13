@@ -54,10 +54,7 @@ const localBusiness = {
     closes: empresa.horario.fecha,
   },
   url: site.url,
-  sameAs: [
-    `https://instagram.com/${empresa.redesSociais.instagram.replace('@', '')}`,
-    `https://facebook.com/${empresa.redesSociais.facebook.replace('@', '')}`,
-  ],
+  sameAs: [`https://instagram.com/${empresa.redesSociais.instagram.replace('@', '')}`, empresa.redesSociais.facebookUrl],
 };
 ---
 

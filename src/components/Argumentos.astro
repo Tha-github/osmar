@@ -9,20 +9,20 @@ const whatsappHref = linkWhatsapp(mensagemSecao(argumentos.eyebrow));
 <section id="argumentos" class="section-y bg-papel text-grafite">
 	<div class="mx-auto max-w-7xl px-6 md:px-10">
 		<div class="grid grid-cols-1 md:grid-cols-12">
-			<div class="md:col-span-9 md:col-start-3">
+			<div class="text-center md:col-span-9 md:col-start-3 md:text-left">
 				<Eyebrow>{argumentos.eyebrow}</Eyebrow>
 				<h2 class="font-display mt-6 text-display-lg">{argumentos.titulo}</h2>
 
 				<div class="mt-16 flex flex-col gap-12 md:mt-20 md:gap-16">
 					{
 						argumentos.itens.map((item) => (
-							<div class="flex flex-col gap-3 sm:flex-row sm:gap-8">
+							<div class="flex flex-col items-center gap-3 text-center sm:flex-row sm:items-start sm:gap-8 sm:text-left">
 								<span class="font-mono text-mono uppercase tracking-widest text-grafite/60 sm:w-32 sm:shrink-0">
 									{item.rotulo}
 								</span>
 								<div>
 									<h3 class="font-display text-display-md">{item.titulo}</h3>
-									<p class="mt-3 max-w-md text-body text-grafite/70">{item.texto}</p>
+									<p class="mx-auto mt-3 max-w-md text-body text-grafite/70 sm:mx-0">{item.texto}</p>
 								</div>
 							</div>
 						))

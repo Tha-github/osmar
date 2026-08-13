@@ -40,7 +40,7 @@ export const empresa = {
 
   redesSociais: {
     instagram: '@ozenergiasolar',
-    facebook: '@ozenergiasolar',
+    facebookUrl: 'https://www.facebook.com/profile.php?id=61560437069615&locale=pt_BR',
   },
 
   regiaoAtendida: 'Cuiabá e cidades adjacentes',
