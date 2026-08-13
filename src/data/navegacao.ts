@@ -1,5 +1,4 @@
 export const navPrincipal = [
-  { label: 'Soluções', href: '#solucoes' },
   { label: 'Manutenção', href: '#manutencao' },
   { label: 'Como funciona', href: '#como-funciona' },
   { label: 'Sobre', href: '#sobre' },
