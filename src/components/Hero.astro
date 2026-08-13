@@ -1,11 +1,10 @@
 ---
 import Eyebrow from './Eyebrow.astro';
 import GenerationCurve from './GenerationCurve.astro';
-import { empresa } from '../data/empresa';
 import { hero } from '../data/hero';
+import { linkWhatsapp, mensagemSecao } from '../lib/whatsapp';
 
-const mensagemWhatsapp = encodeURIComponent('Olá! Quero simular minha economia com energia solar.');
-const whatsappHref = `https://wa.me/55${empresa.whatsapp}?text=${mensagemWhatsapp}`;
+const whatsappHref = linkWhatsapp(mensagemSecao('Início'));
 ---
 
 <section class="relative overflow-hidden bg-umbra text-dia">
@@ -18,6 +17,11 @@ const whatsappHref = `https://wa.me/55${empresa.whatsapp}?text=${mensagemWhatsap
 			<h1 class="font-display mt-6 text-display-2xl">{hero.titulo}</h1>
 
 			<p class="mt-6 max-w-prose text-body-lg text-dia/80">{hero.paragrafo}</p>
+
+			<p class="mt-4 max-w-prose text-body text-dia/70">
+				{hero.linhaMonitoramento} {hero.linhaGarantia}
+			</p>
+			<p class="mt-2 max-w-prose font-mono text-mono uppercase tracking-widest text-dia/60">{hero.notaGarantia}</p>
 
 			<div class="mt-8 flex flex-wrap items-center gap-4">
 				<a

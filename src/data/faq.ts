@@ -12,7 +12,7 @@ export const faq = [
   {
     pergunta: 'Como funciona a homologação na Energisa?',
     resposta:
-      'Depois da instalação, enviamos a documentação técnica para a Energisa aprovar a ligação. Cuidamos de todo o processo — o prazo em si é definido pela distribuidora, não por nós.',
+      'Nossa equipe de engenharia se antecipa, protocola o projeto junto à concessionária e acompanha até a aprovação. Depois de instalado, solicitamos a vistoria e seu sistema começa a gerar.',
   },
   {
     pergunta: 'Em dias nublados, o sistema continua gerando?',
@@ -22,11 +22,11 @@ export const faq = [
   {
     pergunta: 'Qual é a garantia dos equipamentos?',
     resposta:
-      'Os painéis têm garantia de fabricante de mais de 25 anos de geração; o inversor, entre 5 e 12 anos, dependendo do modelo. Nossa instalação tem garantia própria de mão de obra.',
+      'Os painéis têm garantia de fabricante de 12 anos; o inversor, entre 5 e 15 anos, dependendo do modelo. Nossa instalação tem garantia própria de mão de obra.',
   },
   {
     pergunta: 'E se a conta vier mais alta do que o previsto?',
     resposta:
-      'Se o motivo for falha nossa — projeto, instalação ou manutenção —, pagamos a diferença. É a mesma cláusula de garantia de geração que está no seu contrato.',
+      'Com o serviço de monitoramento e manutenção contratado, é responsabilidade da OZ Energia Solar cuidar disso: se o motivo for falha comprovada nossa — projeto, instalação ou manutenção —, pagamos a diferença, pela mesma cláusula de garantia de geração prevista em contrato.',
   },
 ] as const;

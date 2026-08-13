@@ -14,10 +14,10 @@
  * concêntricos (mês 1 → 25% até mês 4 → 100%, o círculo fechado = eclipse
  * total) que se preenchem com defasagem de 200ms ao entrar na viewport.
  */
-import { empresa } from '../data/empresa';
 import { pagamentos } from '../data/pagamentos';
 import ParceirosFaixa from './ParceirosFaixa.astro';
 import Eyebrow from './Eyebrow.astro';
+import { linkWhatsapp, mensagemSecao } from '../lib/whatsapp';
 
 interface Props {
   headingLevel?: 1 | 2;
@@ -40,10 +40,7 @@ const aneis = pagamentos.escada.map((passo, indice) => {
   return { ...passo, raio, circunferencia, offsetAlvo, indice };
 });
 
-const mensagemWhatsapp = encodeURIComponent(
-  'Olá! Vi as formas de pagamento no site da OZ Energia Solar e quero falar com um consultor.',
-);
-const whatsappHref = `https://wa.me/55${empresa.whatsapp}?text=${mensagemWhatsapp}`;
+const whatsappHref = linkWhatsapp(mensagemSecao(pagamentos.eyebrow));
 ---
 
 <section id="formas-de-pagamento" class="section-y bg-papel text-grafite">

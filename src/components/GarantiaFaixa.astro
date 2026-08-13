@@ -2,6 +2,9 @@
 import Eyebrow from './Eyebrow.astro';
 import ArcDivider from './ArcDivider.astro';
 import { garantia } from '../data/garantia';
+import { linkWhatsapp, mensagemSecao } from '../lib/whatsapp';
+
+const whatsappHref = linkWhatsapp(mensagemSecao('Garantia'));
 ---
 
 <section id="garantia" class="section-y relative overflow-hidden bg-papel text-grafite">
@@ -13,6 +16,14 @@ import { garantia } from '../data/garantia';
 				<Eyebrow>{garantia.eyebrow}</Eyebrow>
 				<h2 class="font-display mt-6 text-display-xl">{garantia.frase}</h2>
 				<p class="mt-6 text-body text-grafite/70">{garantia.nota}</p>
+				<a
+					href={whatsappHref}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="mt-8 inline-block rounded-sm bg-coroa px-6 py-3 text-body-sm font-medium text-grafite transition hover:brightness-95"
+				>
+					{garantia.cta.label}
+				</a>
 			</div>
 		</div>
 	</div>

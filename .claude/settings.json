@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(nohup npx astro preview --port 4321)",
+      "Read(//tmp/**)",
+      "Bash(netstat -ano)",
+      "Bash(node \"C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-User-Desktop-siteosmar\\\\82f39aa5-c0fb-4c05-a708-a600a40030a6\\\\scratchpad\\\\verificar-conteudo.mjs\")",
+      "Bash(node \"C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-User-Desktop-siteosmar\\\\82f39aa5-c0fb-4c05-a708-a600a40030a6\\\\scratchpad\\\\verificar-simulador.mjs\")",
+      "Bash(node \"C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-User-Desktop-siteosmar\\\\82f39aa5-c0fb-4c05-a708-a600a40030a6\\\\scratchpad\\\\screenshot-hero.mjs\")",
+      "Bash(taskkill //F //FI \"IMAGENAME eq node.exe\")"
+    ]
+  }
+}

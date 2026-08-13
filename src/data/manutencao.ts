@@ -1,6 +1,6 @@
 export const manutencao = {
   eyebrow: 'Monitoramento e manutenção',
-  titulo: 'Instalar é o começo. A maioria some depois disso.',
+  titulo: 'Instalar é o começo. A OZ Energia Solar ajuda a prolongar a vida útil do seu sistema.',
   itens: [
     {
       rotulo: 'O que monitoramos',
@@ -12,7 +12,7 @@ export const manutencao = {
     },
     {
       rotulo: 'Quando a geração cai',
-      texto: 'Investigamos a causa remotamente e, se for preciso, enviamos um técnico até o sistema voltar ao previsto.',
+      texto: 'Investigamos a causa remotamente e, se for preciso, enviamos um técnico para averiguar.',
     },
     {
       rotulo: 'Limpeza e inspeção',
@@ -20,16 +20,18 @@ export const manutencao = {
     },
     {
       rotulo: 'Investimento mensal',
-      texto: 'Um valor fixo e baixo, proporcional ao tamanho do seu sistema — parte do mesmo contrato da instalação.',
+      texto: 'Um valor fixo e baixo, proporcional ao tamanho do seu sistema.',
     },
   ],
   clausula: {
-    numero: 'Cláusula 4.2',
+    numero: 'Cláusula 2.3',
     titulo: 'Garantia de geração',
-    texto: 'Se a geração de um mês ficar abaixo do previsto por falha comprovada da OZ — projeto, instalação ou manutenção —, pagamos a diferença entre a energia prevista e a gerada, pela tarifa vigente da distribuidora.',
+    // Regra global da garantia: explicitar a dependência do contrato de
+    // monitoramento e manutenção nesta cláusula, que é a própria fonte da garantia.
+    texto:
+      'Se a geração de um mês ficar abaixo do previsto por falha comprovada da OZ — projeto, instalação ou manutenção —, pagamos a diferença entre a energia prevista e a gerada, pela tarifa vigente da distribuidora. Válida para clientes com este contrato de monitoramento e manutenção em vigor.',
   },
   cta: {
-    label: 'Contratar monitoramento',
-    href: '#contato',
+    label: 'Falar sobre monitoramento',
   },
 } as const;

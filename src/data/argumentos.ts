@@ -1,17 +1,29 @@
-export const argumentos = [
-  {
-    rotulo: 'Conta de energia',
-    titulo: 'Redução imediata da conta',
-    texto: 'A economia aparece já na primeira fatura, sem carência nem promoção temporária.',
+export const argumentos = {
+  eyebrow: 'Retorno do investimento',
+  titulo: 'Quatro motivos que pesam na decisão',
+  itens: [
+    {
+      rotulo: 'Conta de energia',
+      titulo: 'Economia de até 95% da conta',
+      texto: 'Sem carência: comprou, instalou, ligou, economizou.',
+    },
+    {
+      rotulo: 'Imóvel',
+      titulo: 'Valorização do imóvel',
+      texto: 'Pesa na hora de vender ou alugar.',
+    },
+    {
+      rotulo: 'Fonte de energia',
+      titulo: 'Fonte limpa e inesgotável',
+      texto: 'Todos os dias o sol nasce e, a partir de agora, ajuda a gerar a sua energia.',
+    },
+    {
+      rotulo: 'Prazo',
+      titulo: 'Previsibilidade por mais de 25 anos',
+      texto: 'O sistema fotovoltaico é eficiente e duradouro. A OZ orienta e faz a manutenção para você.',
+    },
+  ],
+  cta: {
+    label: 'Saber mais',
   },
-  {
-    rotulo: 'Imóvel',
-    titulo: 'Valorização do imóvel',
-    texto: 'Sistema fotovoltaico é patrimônio, não despesa — pesa a favor na hora de vender ou alugar.',
-  },
-  {
-    rotulo: 'Prazo',
-    titulo: 'Previsibilidade por mais de 25 anos',
-    texto: 'Os painéis têm garantia de fabricante por mais de 25 anos. Você sabe hoje o que vai pagar depois.',
-  },
-] as const;
+} as const;

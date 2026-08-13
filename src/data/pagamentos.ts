@@ -6,7 +6,7 @@ export const pagamentos = {
     {
       rotulo: 'Menor custo total',
       titulo: 'À vista',
-      texto: 'O menor custo total entre as quatro modalidades — sem juros, sem parcela.',
+      texto: 'Vamos buscar a melhor oferta disponível no mercado.',
       textoExpandido:
         'Sem juros de cartão nem de financiamento, o valor à vista reduz o investimento total em relação a qualquer forma parcelada. É a opção de menor custo final, para quem já tem o valor disponível.',
     },
@@ -20,9 +20,9 @@ export const pagamentos = {
     {
       rotulo: 'Parceria bancária',
       titulo: 'Financiamento',
-      texto: 'Parceria com bancos, com análise de crédito e carência antes da primeira parcela.',
+      texto: 'Parceria com vários bancos e carência de até 120 dias para pagar a primeira parcela.',
       textoExpandido:
-        'Trabalhamos com bancos parceiros especializados em financiamento de energia solar. Depois da análise de crédito, você tem carência de alguns meses antes de começar a pagar — o sistema já gerando enquanto a primeira parcela ainda não venceu.',
+        'Trabalhamos com bancos parceiros especializados em financiamento de energia solar. Depois da análise de crédito, você tem carência de até 120 dias antes de começar a pagar — o sistema já gerando enquanto a primeira parcela ainda não venceu.',
     },
   ],
 

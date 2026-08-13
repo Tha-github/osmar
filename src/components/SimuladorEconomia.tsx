@@ -5,10 +5,17 @@ import {
   VALOR_CONTA_MAX,
   VALOR_CONTA_PASSO,
   VALOR_CONTA_PADRAO,
+  CONSUMO_KWH_MIN,
+  CONSUMO_KWH_MAX,
+  CONSUMO_KWH_PASSO,
+  reaisParaKwh,
+  kwhParaReais,
   calcularSimulacao,
   type TipoImovel,
 } from '../data/calculo';
-import { empresa } from '../data/empresa';
+import { linkWhatsapp } from '../lib/whatsapp';
+
+type UnidadeEntrada = 'reais' | 'kwh';
 
 const formatoMoeda = new Intl.NumberFormat('pt-BR', {
   style: 'currency',
@@ -19,6 +26,10 @@ const formatoMoeda = new Intl.NumberFormat('pt-BR', {
 const formatoUmaCasa = new Intl.NumberFormat('pt-BR', {
   minimumFractionDigits: 1,
   maximumFractionDigits: 1,
+});
+
+const formatoInteiro = new Intl.NumberFormat('pt-BR', {
+  maximumFractionDigits: 0,
 });
 
 /** Anima um número até o valor-alvo em `duracaoMs`, com easing de saída.
@@ -75,6 +86,7 @@ function lerTextoDoInput(evento: Event): string {
 
 export default function SimuladorEconomia() {
   const [valorConta, setValorConta] = useState(VALOR_CONTA_PADRAO);
+  const [unidade, setUnidade] = useState<UnidadeEntrada>('reais');
   const [tipoImovel, setTipoImovel] = useState<TipoImovel>('residencia');
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [nome, setNome] = useState('');
@@ -86,12 +98,23 @@ export default function SimuladorEconomia() {
   const potenciaAnimada = useContagemAnimada(resultado.potenciaSugeridaKwp);
   const economiaMensalAnimada = useContagemAnimada(resultado.economiaMensal);
   const economia25AnosAnimada = useContagemAnimada(resultado.economia25Anos);
-  const paybackAnimado = useContagemAnimada(resultado.paybackAnos);
+  // Anos é sempre derivado dos meses animados (não tem sua própria animação),
+  // pra payback em meses e em anos nunca mostrarem números inconsistentes.
+  const paybackMesesAnimado = useContagemAnimada(resultado.paybackMeses);
+  const paybackAnosAnimado = paybackMesesAnimado / 12;
 
   function aoMudarValorConta(valor: number) {
     if (Number.isNaN(valor)) return;
     setValorConta(Math.min(VALOR_CONTA_MAX, Math.max(VALOR_CONTA_MIN, valor)));
   }
+
+  function aoMudarConsumoKwh(consumoKwh: number) {
+    if (Number.isNaN(consumoKwh)) return;
+    const consumoClamped = Math.min(CONSUMO_KWH_MAX, Math.max(CONSUMO_KWH_MIN, consumoKwh));
+    aoMudarValorConta(kwhParaReais(consumoClamped));
+  }
+
+  const consumoKwhExibido = reaisParaKwh(valorConta);
 
   const podeEnviar = nome.trim().length > 1 && whatsapp.trim().length >= 8;
 
@@ -101,7 +124,7 @@ export default function SimuladorEconomia() {
     const tipoRotulo = TIPOS_IMOVEL.find((tipo) => tipo.valor === tipoImovel)?.rotulo ?? tipoImovel;
 
     const mensagem = [
-      'Olá! Simulei minha economia no site da OZ Energia Solar e quero uma proposta detalhada.',
+      'Olá! Vim da seção Simulador do site. Simulei minha economia e quero uma proposta detalhada.',
       '',
       `Nome: ${nome}`,
       `Cidade: ${cidade.trim() || 'não informada'}`,
@@ -113,10 +136,10 @@ export default function SimuladorEconomia() {
       `- Potência sugerida: ${formatoUmaCasa.format(resultado.potenciaSugeridaKwp)} kWp`,
       `- Economia mensal estimada: ${formatoMoeda.format(resultado.economiaMensal)}`,
       `- Economia em 25 anos: ${formatoMoeda.format(resultado.economia25Anos)}`,
-      `- Payback estimado: ${formatoUmaCasa.format(resultado.paybackAnos)} anos`,
+      `- Payback estimado: ${formatoInteiro.format(resultado.paybackMeses)} meses (≈ ${formatoUmaCasa.format(resultado.paybackAnos)} anos)`,
     ].join('\n');
 
-    const link = `https://wa.me/55${empresa.whatsapp}?text=${encodeURIComponent(mensagem)}`;
+    const link = linkWhatsapp(mensagem);
     window.open(link, '_blank', 'noopener,noreferrer');
   }
 
@@ -129,45 +152,121 @@ export default function SimuladorEconomia() {
             <h2 class="font-display mt-3 text-display-lg">Quanto você pode economizar?</h2>
 
             <div class="mt-10">
-              <label
-                for="valor-conta-slider"
-                class="font-mono text-mono uppercase tracking-widest text-grafite/60"
-              >
-                Valor médio da conta de luz
-              </label>
-
-              <p class="font-mono mt-3 text-display-md tabular-nums">{formatoMoeda.format(valorConta)}</p>
-
-              <input
-                id="valor-conta-slider"
-                type="range"
-                min={VALOR_CONTA_MIN}
-                max={VALOR_CONTA_MAX}
-                step={VALOR_CONTA_PASSO}
-                value={valorConta}
-                onInput={(e) => aoMudarValorConta(lerNumeroDoInput(e))}
-                class="simulador-slider mt-4"
-              />
-
-              <div class="mt-2 flex items-center justify-between font-mono text-mono text-grafite/60">
-                <span>{formatoMoeda.format(VALOR_CONTA_MIN)}</span>
-                <span>{formatoMoeda.format(VALOR_CONTA_MAX)}</span>
+              <span class="font-mono text-mono uppercase tracking-widest text-grafite/60">Unidade</span>
+              <div role="group" aria-label="Unidade de entrada" class="mt-4 flex flex-wrap gap-x-6 gap-y-2">
+                <button
+                  type="button"
+                  aria-pressed={unidade === 'reais'}
+                  onClick={() => setUnidade('reais')}
+                  class={
+                    unidade === 'reais'
+                      ? 'border-b-2 border-grafite pb-1 text-body-sm font-medium text-grafite'
+                      : 'border-b-2 border-transparent pb-1 text-body-sm text-grafite/60 transition hover:border-grafite/30 hover:text-grafite'
+                  }
+                >
+                  Valor da conta (R$)
+                </button>
+                <button
+                  type="button"
+                  aria-pressed={unidade === 'kwh'}
+                  onClick={() => setUnidade('kwh')}
+                  class={
+                    unidade === 'kwh'
+                      ? 'border-b-2 border-grafite pb-1 text-body-sm font-medium text-grafite'
+                      : 'border-b-2 border-transparent pb-1 text-body-sm text-grafite/60 transition hover:border-grafite/30 hover:text-grafite'
+                  }
+                >
+                  Consumo (kWh)
+                </button>
               </div>
-
-              <label for="valor-conta-numero" class="mt-4 block text-body-sm text-grafite/70">
-                Ou digite o valor exato
-              </label>
-              <input
-                id="valor-conta-numero"
-                type="number"
-                min={VALOR_CONTA_MIN}
-                max={VALOR_CONTA_MAX}
-                step={VALOR_CONTA_PASSO}
-                value={valorConta}
-                onInput={(e) => aoMudarValorConta(lerNumeroDoInput(e))}
-                class="mt-2 w-36 border border-grafite/20 bg-transparent px-3 py-2 text-body-sm text-grafite"
-              />
             </div>
+
+            {unidade === 'reais' ? (
+              <div class="mt-8">
+                <label
+                  for="valor-conta-slider"
+                  class="font-mono text-mono uppercase tracking-widest text-grafite/60"
+                >
+                  Valor médio da conta de luz
+                </label>
+
+                <p class="font-mono mt-3 text-display-md tabular-nums">{formatoMoeda.format(valorConta)}</p>
+
+                <input
+                  id="valor-conta-slider"
+                  type="range"
+                  min={VALOR_CONTA_MIN}
+                  max={VALOR_CONTA_MAX}
+                  step={VALOR_CONTA_PASSO}
+                  value={valorConta}
+                  onInput={(e) => aoMudarValorConta(lerNumeroDoInput(e))}
+                  class="simulador-slider mt-4"
+                />
+
+                <div class="mt-2 flex items-center justify-between font-mono text-mono text-grafite/60">
+                  <span>{formatoMoeda.format(VALOR_CONTA_MIN)}</span>
+                  <span>{formatoMoeda.format(VALOR_CONTA_MAX)}</span>
+                </div>
+
+                <label for="valor-conta-numero" class="mt-4 block text-body-sm text-grafite/70">
+                  Ou digite o valor exato
+                </label>
+                <input
+                  id="valor-conta-numero"
+                  type="number"
+                  min={VALOR_CONTA_MIN}
+                  max={VALOR_CONTA_MAX}
+                  step={VALOR_CONTA_PASSO}
+                  value={valorConta}
+                  onInput={(e) => aoMudarValorConta(lerNumeroDoInput(e))}
+                  class="mt-2 w-36 border border-grafite/20 bg-transparent px-3 py-2 text-body-sm text-grafite"
+                />
+              </div>
+            ) : (
+              <div class="mt-8">
+                <label
+                  for="consumo-kwh-slider"
+                  class="font-mono text-mono uppercase tracking-widest text-grafite/60"
+                >
+                  Consumo médio mensal
+                </label>
+
+                <p class="font-mono mt-3 text-display-md tabular-nums">
+                  {formatoInteiro.format(consumoKwhExibido)}
+                  <span class="text-body-lg"> kWh</span>
+                </p>
+
+                <input
+                  id="consumo-kwh-slider"
+                  type="range"
+                  min={CONSUMO_KWH_MIN}
+                  max={CONSUMO_KWH_MAX}
+                  step={CONSUMO_KWH_PASSO}
+                  value={consumoKwhExibido}
+                  onInput={(e) => aoMudarConsumoKwh(lerNumeroDoInput(e))}
+                  class="simulador-slider mt-4"
+                />
+
+                <div class="mt-2 flex items-center justify-between font-mono text-mono text-grafite/60">
+                  <span>{formatoInteiro.format(CONSUMO_KWH_MIN)} kWh</span>
+                  <span>{formatoInteiro.format(CONSUMO_KWH_MAX)} kWh</span>
+                </div>
+
+                <label for="consumo-kwh-numero" class="mt-4 block text-body-sm text-grafite/70">
+                  Ou digite o valor exato
+                </label>
+                <input
+                  id="consumo-kwh-numero"
+                  type="number"
+                  min={CONSUMO_KWH_MIN}
+                  max={CONSUMO_KWH_MAX}
+                  step={CONSUMO_KWH_PASSO}
+                  value={Math.round(consumoKwhExibido)}
+                  onInput={(e) => aoMudarConsumoKwh(lerNumeroDoInput(e))}
+                  class="mt-2 w-36 border border-grafite/20 bg-transparent px-3 py-2 text-body-sm text-grafite"
+                />
+              </div>
+            )}
 
             <div class="mt-10">
               <span class="font-mono text-mono uppercase tracking-widest text-grafite/60">Tipo de imóvel</span>
@@ -208,8 +307,11 @@ export default function SimuladorEconomia() {
                     Payback estimado
                   </span>
                   <p class="font-mono mt-2 whitespace-nowrap text-display-md tabular-nums">
-                    {formatoUmaCasa.format(paybackAnimado)}
-                    <span class="text-body-lg"> anos</span>
+                    {formatoInteiro.format(paybackMesesAnimado)}
+                    <span class="text-body-lg"> meses</span>
+                  </p>
+                  <p class="font-mono mt-1 whitespace-nowrap text-body-sm tabular-nums text-grafite/60">
+                    ≈ {formatoUmaCasa.format(paybackAnosAnimado)} anos
                   </p>
                 </div>
                 <div>

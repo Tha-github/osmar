@@ -4,10 +4,11 @@
  * sem preenchimento de destaque — só um ícone monoline (o mesmo traço fino
  * usado nos ícones do rodapé) sobre um fundo neutro escuro.
  */
-import { empresa } from '../data/empresa';
+import { linkWhatsapp } from '../lib/whatsapp';
 
-const mensagem = encodeURIComponent('Olá! Vim pelo site da OZ Energia Solar.');
-const href = `https://wa.me/55${empresa.whatsapp}?text=${mensagem}`;
+// Botão flutuante e persistente, não vinculado a uma seção específica —
+// por isso é a única exceção à regra global de citar o nome da seção.
+const href = linkWhatsapp('Olá! Vim pelo site da OZ Energia Solar.');
 ---
 
 <a

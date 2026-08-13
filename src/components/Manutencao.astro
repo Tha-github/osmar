@@ -1,6 +1,7 @@
 ---
 import Eyebrow from './Eyebrow.astro';
 import { manutencao } from '../data/manutencao';
+import { linkWhatsapp, mensagemSecao } from '../lib/whatsapp';
 
 /**
  * headingLevel ajusta a hierarquia semântica: h1 quando a seção é o
@@ -15,6 +16,8 @@ interface Props {
 const { headingLevel = 2 } = Astro.props;
 const TituloTag = `h${headingLevel}`;
 const ClausulaTag = `h${headingLevel + 1}`;
+
+const whatsappHref = linkWhatsapp(mensagemSecao(manutencao.eyebrow));
 ---
 
 <section id="manutencao" class="section-y bg-umbra text-dia">
@@ -43,7 +46,9 @@ const ClausulaTag = `h${headingLevel + 1}`;
 
 		<div class="mt-12 md:mt-16">
 			<a
-				href={manutencao.cta.href}
+				href={whatsappHref}
+				target="_blank"
+				rel="noopener noreferrer"
 				class="inline-block rounded-sm bg-coroa px-6 py-3 text-body-sm font-medium text-grafite transition hover:brightness-95"
 			>
 				{manutencao.cta.label}

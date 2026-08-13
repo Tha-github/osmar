@@ -1,22 +1,18 @@
 export const comoFunciona = [
   {
-    titulo: 'Consultoria e análise da conta',
-    texto: 'Avaliamos sua conta de luz e seu padrão de consumo para dimensionar o que faz sentido — sem simulação genérica.',
+    titulo: 'Análise da sua conta',
+    texto: 'Avaliamos sua conta de luz e seu padrão de consumo para dimensionar o que faz sentido para você, sem simulação genérica.',
   },
   {
-    titulo: 'Projeto dimensionado',
-    texto: 'Calculamos a potência ideal para o seu telhado e para o seu consumo real, com cada equipamento especificado.',
+    titulo: 'Projeto personalizado',
+    texto: 'Estudamos o projeto ideal para o seu perfil de consumo real, com equipamentos adequados.',
   },
   {
-    titulo: 'Homologação na Energisa',
-    texto: 'Cuidamos da documentação técnica e do processo de ligação junto à distribuidora, sem que você precise correr atrás disso.',
+    titulo: 'Homologação na concessionária',
+    texto: 'Cuidamos da documentação técnica e do processo junto à concessionária, sem que você precise correr atrás disso. É o nosso trabalho.',
   },
   {
-    titulo: 'Instalação',
-    texto: 'Equipe própria em Cuiabá instala o sistema e testa cada painel antes de ligar.',
-  },
-  {
-    titulo: 'Monitoramento contínuo',
-    texto: 'A partir daqui, o sistema entra no monitoramento mensal — a etapa que continua depois que a instalação termina.',
+    titulo: 'Instalação rápida',
+    texto: 'Equipe técnica capacitada e pronta para instalar o mais rápido possível. A pressa é nossa.',
   },
 ] as const;

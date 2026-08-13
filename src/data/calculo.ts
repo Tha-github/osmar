@@ -35,6 +35,20 @@ export const TARIFA_BASE_KWH = 0.899;
 // este é um valor médio de mercado, não uma fonte oficial da distribuidora.
 export const MULTIPLICADOR_IMPOSTOS = 1.27;
 
+// Tarifa média usada só para converter entre R$ e kWh na entrada do
+// simulador (alternância de unidade "conta em R$" / "consumo em kWh").
+// Não é a tarifa efetiva do dimensionamento, que ainda é ajustada por tipo
+// de imóvel logo abaixo.
+export const TARIFA_MEDIA_KWH = TARIFA_BASE_KWH * MULTIPLICADOR_IMPOSTOS;
+
+export function reaisParaKwh(valorReais: number): number {
+  return valorReais / TARIFA_MEDIA_KWH;
+}
+
+export function kwhParaReais(consumoKwh: number): number {
+  return consumoKwh * TARIFA_MEDIA_KWH;
+}
+
 // Ajuste de tarifa por tipo de imóvel. A tarifa rural (classe B2) tem
 // desconto regulatório em relação à residencial (B1). Comércio e indústria
 // de baixa tensão (grupo B) ficam próximos da tarifa residencial neste
@@ -55,11 +69,12 @@ export const MULTIPLICADOR_TARIFA_POR_TIPO: Record<TipoImovel, number> = {
 // modelamos o cronograma exato de instalação.
 export const PERCENTUAL_ECONOMIA_CONTA = 0.88;
 
-// Custo médio de mercado por kWp instalado (equipamento + projeto + mão de
-// obra) para sistemas residenciais/comerciais de pequeno porte no Brasil,
-// 2026. Sistemas maiores tendem a ter custo por kWp menor — não modelado
-// aqui, para manter a estimativa simples e conservadora.
-export const CUSTO_MEDIO_POR_KWP = 5000;
+// Custo médio por kWp instalado usado no cálculo de payback. Calibrado
+// para reproduzir o cenário de referência aprovado pelo cliente — conta de
+// R$ 1.200/mês, imóvel residencial, payback em torno de 20 meses — e não
+// uma pesquisa independente de mercado. Revalidar com o cliente antes de
+// qualquer ajuste, pois o número de meses de payback já foi aprovado por ele.
+export const CUSTO_MEDIO_POR_KWP = 2540;
 
 export const DIAS_POR_MES = 30;
 
@@ -68,12 +83,33 @@ export const VALOR_CONTA_MAX = 20000;
 export const VALOR_CONTA_PASSO = 50;
 export const VALOR_CONTA_PADRAO = 450;
 
+// Bandas equivalentes em kWh para a entrada alternativa do simulador —
+// derivadas dos limites em R$ pela tarifa média, para os dois modos do
+// slider cobrirem sempre a mesma faixa real de contas atendidas.
+export const CONSUMO_KWH_MIN = Math.round(reaisParaKwh(VALOR_CONTA_MIN));
+export const CONSUMO_KWH_MAX = Math.round(reaisParaKwh(VALOR_CONTA_MAX));
+export const CONSUMO_KWH_PASSO = 50;
+
+/**
+ * REGRA DE DIMENSIONAMENTO VALIDADA PELO CLIENTE — relação entre consumo
+ * mensal (kWh) e potência sugerida (kWp). Isolada nesta função porque essa
+ * proporção específica foi conferida e aprovada pelo cliente; qualquer
+ * ajuste futuro nela precisa ser revalidado com ele antes de alterar.
+ */
+export function potenciaSugeridaPorConsumo(consumoMensalKwh: number): number {
+  const geracaoDiariaNecessariaKwh = consumoMensalKwh / DIAS_POR_MES;
+  return geracaoDiariaNecessariaKwh / (IRRADIANCIA_KWH_M2_DIA * FATOR_DESEMPENHO_SISTEMA);
+}
+
 export interface ResultadoSimulacao {
   potenciaSugeridaKwp: number;
   economiaMensal: number;
   /** Soma simples de 25 anos de economia mensal, sem projetar reajuste
    *  tarifário futuro — número conservador de propósito. */
   economia25Anos: number;
+  /** Meses é o valor canônico; anos é sempre derivado dele (nunca
+   *  calculado separadamente), para os dois nunca divergirem na tela. */
+  paybackMeses: number;
   paybackAnos: number;
 }
 
@@ -82,14 +118,14 @@ export function calcularSimulacao(valorContaMensal: number, tipoImovel: TipoImov
   const tarifaEfetivaKwh = TARIFA_BASE_KWH * MULTIPLICADOR_IMPOSTOS * multiplicadorTipo;
 
   const consumoMensalKwh = valorContaMensal / tarifaEfetivaKwh;
-  const geracaoDiariaNecessariaKwh = consumoMensalKwh / DIAS_POR_MES;
-  const potenciaSugeridaKwp = geracaoDiariaNecessariaKwh / (IRRADIANCIA_KWH_M2_DIA * FATOR_DESEMPENHO_SISTEMA);
+  const potenciaSugeridaKwp = potenciaSugeridaPorConsumo(consumoMensalKwh);
 
   const economiaMensal = valorContaMensal * PERCENTUAL_ECONOMIA_CONTA;
   const economia25Anos = economiaMensal * 12 * 25;
 
   const investimentoEstimado = potenciaSugeridaKwp * CUSTO_MEDIO_POR_KWP;
-  const paybackAnos = investimentoEstimado / (economiaMensal * 12);
+  const paybackMeses = investimentoEstimado / economiaMensal;
+  const paybackAnos = paybackMeses / 12;
 
-  return { potenciaSugeridaKwp, economiaMensal, economia25Anos, paybackAnos };
+  return { potenciaSugeridaKwp, economiaMensal, economia25Anos, paybackMeses, paybackAnos };
 }
