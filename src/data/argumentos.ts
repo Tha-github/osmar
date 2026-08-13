@@ -23,7 +23,4 @@ export const argumentos = {
       texto: 'O sistema fotovoltaico é eficiente e duradouro. A OZ orienta e faz a manutenção para você.',
     },
   ],
-  cta: {
-    label: 'Saber mais',
-  },
 } as const;

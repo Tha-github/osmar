@@ -46,9 +46,9 @@
   --container-prose: 68ch;
 
   /* Ritmo vertical entre seções */
-  --spacing-section-sm: 4rem; /* 64px */
-  --spacing-section-md: 6rem; /* 96px */
-  --spacing-section-lg: 8rem; /* 128px */
+  --spacing-section-sm: 3.5rem; /* 56px */
+  --spacing-section-md: 4.5rem; /* 72px */
+  --spacing-section-lg: 5.5rem; /* 88px */
 }
 
 /* Tipografia de display: Archivo Variable com eixo de largura expandido. */

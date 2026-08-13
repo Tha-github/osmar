@@ -6,7 +6,7 @@ export const empresa = {
   // PROVISÓRIO — confirmar número definitivo antes de publicar.
   whatsapp: '65993091856',
 
-  email: 'osmarjr2012@gmail.com',
+  email: 'contato@ozenergiasolar.com.br',
 
   // PROVISÓRIO — substituir pelo CNPJ real antes de publicar.
   cnpj: '00.000.000/0001-00',

@@ -1,15 +1,12 @@
 ---
 import Eyebrow from './Eyebrow.astro';
 import { argumentos } from '../data/argumentos';
-import { linkWhatsapp, mensagemSecao } from '../lib/whatsapp';
-
-const whatsappHref = linkWhatsapp(mensagemSecao(argumentos.eyebrow));
 ---
 
 <section id="argumentos" class="section-y bg-papel text-grafite">
 	<div class="mx-auto max-w-7xl px-6 md:px-10">
 		<div class="grid grid-cols-1 md:grid-cols-12">
-			<div class="text-center md:col-span-9 md:col-start-3 md:text-left">
+			<div class="text-center md:col-span-9 md:text-left">
 				<Eyebrow>{argumentos.eyebrow}</Eyebrow>
 				<h2 class="font-display mt-6 text-display-lg">{argumentos.titulo}</h2>
 
@@ -27,17 +24,6 @@ const whatsappHref = linkWhatsapp(mensagemSecao(argumentos.eyebrow));
 							</div>
 						))
 					}
-				</div>
-
-				<div class="mt-16 md:mt-20">
-					<a
-						href={whatsappHref}
-						target="_blank"
-						rel="noopener noreferrer"
-						class="inline-block rounded-sm bg-coroa px-6 py-3 text-body-sm font-medium text-grafite transition hover:brightness-95"
-					>
-						{argumentos.cta.label}
-					</a>
 				</div>
 			</div>
 		</div>
