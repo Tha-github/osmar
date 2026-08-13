@@ -5,9 +5,9 @@ import LinkSublinhado from './LinkSublinhado.astro';
 import { paraQuem } from '../data/paraQuem';
 
 import fotoResidencial from '../assets/para-quem/residencial.jpg';
-import fotoEmpresarial from '../assets/para-quem/empresarial.jpg';
-import fotoRural from '../assets/para-quem/rural.jpg';
-import fotoCondominios from '../assets/para-quem/condominios.jpg';
+import fotoEmpresarial from '../assets/para-quem/empresas.jpg';
+import fotoRural from '../assets/para-quem/arearural.jpg';
+import fotoCondominios from '../assets/para-quem/condominio.jpg';
 
 const fotos = [fotoResidencial, fotoEmpresarial, fotoRural, fotoCondominios];
 ---
@@ -27,9 +27,9 @@ const fotos = [fotoResidencial, fotoEmpresarial, fotoRural, fotoCondominios];
 					>
 						<div class="md:w-1/2">
 							{/*
-								As fotos de origem não vêm em 4:3 (uma é quadrada, uma vertical,
-								uma widescreen) — object-cover preenche a caixa sem distorcer,
-								cortando o excesso centralizado.
+								As fotos de origem não vêm em 4:3 (residencial é quadrada, as
+								outras três são widescreen 16:9) — object-cover preenche a
+								caixa sem distorcer, cortando o excesso centralizado.
 							*/}
 							<div class="relative aspect-[4/3] w-full overflow-hidden bg-grafite/5">
 								<Image

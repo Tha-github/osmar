@@ -27,44 +27,42 @@ function encontrarImagem(nomeArquivo: string): string {
   }
   return arquivos[chave];
 }
+
+// Os três logos ficam lado a lado em uma linha única em qualquer largura de
+// tela (mesma ordem e proporção relativa do desktop) — no mobile, todos
+// encolhem juntos por este fator para caber sem quebrar linha nem estourar
+// os 360px mínimos exigidos em CLAUDE.md.
+const FATOR_MOBILE = 0.62;
 ---
 
-<aside aria-label="Instituições financeiras parceiras" class="mt-20 md:mt-24">
+<aside aria-label="Instituições financeiras parceiras" class="mt-28 md:mt-32">
 	<p class="text-center font-mono text-mono uppercase tracking-widest text-grafite/60">
 		{parceirosTitulo}
 	</p>
 
-	{/*
-		Breakpoint próprio em 480px (não é um dos padrões do Tailwind):
-		abaixo disso, grid de 2 colunas com o terceiro logo ocupando a
-		linha inteira (2 + 1, centralizado); a partir de 480px, 3 colunas
-		numa linha única. Determinístico por largura de tela, não por
-		"será que cabe".
-	*/}
-	<div class="mx-auto mt-6 grid w-fit grid-cols-[repeat(2,auto)] place-items-center gap-x-10 gap-y-6 min-[480px]:grid-cols-[repeat(3,auto)] min-[480px]:gap-x-14">
+	<div class="mx-auto mt-6 flex w-fit flex-nowrap items-center justify-center gap-x-6 min-[480px]:gap-x-14">
 		{
-			parceiros.map((parceiro, indice) => {
+			parceiros.map((parceiro) => {
 				const urlImagem = encontrarImagem(parceiro.arquivo);
-				const largura = Math.round(parceiro.alturaOptica * parceiro.proporcao);
+				const alturaDesktop = parceiro.alturaOptica;
+				const larguraDesktop = Math.round(parceiro.alturaOptica * parceiro.proporcao);
+				const alturaMobile = Math.round(alturaDesktop * FATOR_MOBILE);
+				const larguraMobile = Math.round(larguraDesktop * FATOR_MOBILE);
 				const conteudo = (
 					<span
 						role="img"
 						aria-label={parceiro.alt}
-						class="parceiro-logo inline-block bg-grafite opacity-55 transition-opacity duration-200 hover:opacity-100"
-						style={`height: ${parceiro.alturaOptica}px; width: ${largura}px; --logo-url: url(${urlImagem});`}
+						class="parceiro-logo inline-block shrink-0 bg-grafite opacity-55 transition-opacity duration-200 hover:opacity-100"
+						style={`--altura-mobile: ${alturaMobile}px; --largura-mobile: ${larguraMobile}px; --altura-desktop: ${alturaDesktop}px; --largura-desktop: ${larguraDesktop}px; --logo-url: url(${urlImagem});`}
 					/>
 				);
 
-				return (
-					<div class:list={[indice === 2 ? 'col-span-2 min-[480px]:col-span-1' : '']}>
-						{parceiro.link ? (
-							<a href={parceiro.link} target="_blank" rel="noopener noreferrer" aria-label={parceiro.alt}>
-								{conteudo}
-							</a>
-						) : (
-							conteudo
-						)}
-					</div>
+				return parceiro.link ? (
+					<a href={parceiro.link} target="_blank" rel="noopener noreferrer" aria-label={parceiro.alt}>
+						{conteudo}
+					</a>
+				) : (
+					conteudo
 				);
 			})
 		}
@@ -81,5 +79,14 @@ function encontrarImagem(nomeArquivo: string): string {
 		mask-repeat: no-repeat;
 		-webkit-mask-position: center;
 		mask-position: center;
+		height: var(--altura-mobile);
+		width: var(--largura-mobile);
+	}
+
+	@media (min-width: 480px) {
+		.parceiro-logo {
+			height: var(--altura-desktop);
+			width: var(--largura-desktop);
+		}
 	}
 </style>

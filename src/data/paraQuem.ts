@@ -10,7 +10,7 @@ export const paraQuem = [
     link: { label: 'Ver soluções residenciais', href: '#solucoes' },
   },
   {
-    alt: 'Painéis solares instalados em telhado industrial, vista ampla',
+    alt: 'Vista aérea de prédio comercial com painéis solares em todo o telhado e estacionamento ao lado',
     rotulo: 'Empresarial e industrial',
     titulo: 'Energia é custo fixo demais para operação',
     paragrafos: [
@@ -20,7 +20,7 @@ export const paraQuem = [
     link: { label: 'Ver soluções empresariais', href: '#solucoes' },
   },
   {
-    alt: 'Equipe instalando painéis solares no telhado de um imóvel',
+    alt: 'Vista aérea de casa de fazenda com painéis solares no telhado, cercada por árvores',
     rotulo: 'Rural',
     titulo: 'Produção que não pode esperar a rede cair',
     paragrafos: [
@@ -30,7 +30,7 @@ export const paraQuem = [
     link: { label: 'Ver soluções rurais', href: '#solucoes' },
   },
   {
-    alt: 'Painéis solares em telhado residencial ao entardecer',
+    alt: 'Painéis solares instalados no telhado de um conjunto de prédios residenciais',
     rotulo: 'Condomínios',
     titulo: 'A taxa que sobe com elevador, bomba e portão',
     paragrafos: [
