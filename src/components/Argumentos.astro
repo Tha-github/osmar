@@ -3,7 +3,6 @@ import Eyebrow from './Eyebrow.astro';
 import { argumentos } from '../data/argumentos';
 import { linkWhatsapp, mensagemSecao } from '../lib/whatsapp';
 
-const [item1, item2, item3, item4] = argumentos.itens;
 const whatsappHref = linkWhatsapp(mensagemSecao(argumentos.eyebrow));
 ---
 
@@ -13,60 +12,34 @@ const whatsappHref = linkWhatsapp(mensagemSecao(argumentos.eyebrow));
 			<div class="md:col-span-9 md:col-start-3">
 				<Eyebrow>{argumentos.eyebrow}</Eyebrow>
 				<h2 class="font-display mt-6 text-display-lg">{argumentos.titulo}</h2>
-			</div>
-		</div>
 
-		<div class="mt-16 grid grid-cols-1 gap-y-16 md:mt-20 md:grid-cols-12 md:gap-y-24">
-			<div class="flex flex-col gap-3 sm:flex-row sm:gap-8 md:col-span-6 md:col-start-1">
-				<span class="font-mono text-mono uppercase tracking-widest text-grafite/60 sm:w-32 sm:shrink-0">
-					{item1.rotulo}
-				</span>
-				<div>
-					<h3 class="font-display text-display-md">{item1.titulo}</h3>
-					<p class="mt-3 max-w-md text-body text-grafite/70">{item1.texto}</p>
+				<div class="mt-16 flex flex-col gap-12 md:mt-20 md:gap-16">
+					{
+						argumentos.itens.map((item) => (
+							<div class="flex flex-col gap-3 sm:flex-row sm:gap-8">
+								<span class="font-mono text-mono uppercase tracking-widest text-grafite/60 sm:w-32 sm:shrink-0">
+									{item.rotulo}
+								</span>
+								<div>
+									<h3 class="font-display text-display-md">{item.titulo}</h3>
+									<p class="mt-3 max-w-md text-body text-grafite/70">{item.texto}</p>
+								</div>
+							</div>
+						))
+					}
+				</div>
+
+				<div class="mt-16 md:mt-20">
+					<a
+						href={whatsappHref}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="inline-block rounded-sm bg-coroa px-6 py-3 text-body-sm font-medium text-grafite transition hover:brightness-95"
+					>
+						{argumentos.cta.label}
+					</a>
 				</div>
 			</div>
-
-			<div class="flex flex-col gap-3 sm:flex-row sm:gap-8 md:col-span-6 md:col-start-3">
-				<span class="font-mono text-mono uppercase tracking-widest text-grafite/60 sm:w-32 sm:shrink-0">
-					{item2.rotulo}
-				</span>
-				<div>
-					<h3 class="font-display text-display-md">{item2.titulo}</h3>
-					<p class="mt-3 max-w-md text-body text-grafite/70">{item2.texto}</p>
-				</div>
-			</div>
-
-			<div class="flex flex-col gap-3 sm:flex-row sm:gap-8 md:col-span-6 md:col-start-5">
-				<span class="font-mono text-mono uppercase tracking-widest text-grafite/60 sm:w-32 sm:shrink-0">
-					{item3.rotulo}
-				</span>
-				<div>
-					<h3 class="font-display text-display-md">{item3.titulo}</h3>
-					<p class="mt-3 max-w-md text-body text-grafite/70">{item3.texto}</p>
-				</div>
-			</div>
-
-			<div class="flex flex-col gap-3 sm:flex-row sm:gap-8 md:col-span-6 md:col-start-7">
-				<span class="font-mono text-mono uppercase tracking-widest text-grafite/60 sm:w-32 sm:shrink-0">
-					{item4.rotulo}
-				</span>
-				<div>
-					<h3 class="font-display text-display-md">{item4.titulo}</h3>
-					<p class="mt-3 max-w-md text-body text-grafite/70">{item4.texto}</p>
-				</div>
-			</div>
-		</div>
-
-		<div class="mt-16 md:mt-20">
-			<a
-				href={whatsappHref}
-				target="_blank"
-				rel="noopener noreferrer"
-				class="inline-block rounded-sm bg-coroa px-6 py-3 text-body-sm font-medium text-grafite transition hover:brightness-95"
-			>
-				{argumentos.cta.label}
-			</a>
 		</div>
 	</div>
 </section>

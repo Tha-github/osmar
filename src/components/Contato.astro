@@ -85,48 +85,12 @@ const mapaEmbedUrl = `https://www.google.com/maps?q=${encodeURIComponent(enderec
 
 				<p class="mt-6 text-body text-grafite/70">{empresa.horarioFuncionamento}</p>
 
-				<div class="mt-8">
-					<button
-						type="button"
-						id="mapa-toggle"
-						class="group relative block aspect-4/3 w-full overflow-hidden border border-grafite/15 bg-grafite/[0.03] text-left"
-						aria-label={`${contato.ctaMapa} — localização da ${empresa.nome}`}
-					>
-						<svg class="absolute inset-0 h-full w-full text-grafite/10" aria-hidden="true">
-							<defs>
-								<pattern id="grade-mapa" width="24" height="24" patternUnits="userSpaceOnUse">
-									<path d="M24 0H0V24" fill="none" stroke="currentColor" stroke-width="1"></path>
-								</pattern>
-							</defs>
-							<rect width="100%" height="100%" fill="url(#grade-mapa)"></rect>
-						</svg>
-
-						<span class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-							<svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-								<circle cx="14" cy="14" r="9" stroke="var(--coroa)" stroke-width="1.5"></circle>
-								<line x1="14" y1="0.5" x2="14" y2="6" stroke="var(--coroa)" stroke-width="1.5"></line>
-								<line x1="14" y1="22" x2="14" y2="27.5" stroke="var(--coroa)" stroke-width="1.5"></line>
-								<line x1="0.5" y1="14" x2="6" y2="14" stroke="var(--coroa)" stroke-width="1.5"></line>
-								<line x1="22" y1="14" x2="27.5" y2="14" stroke="var(--coroa)" stroke-width="1.5"></line>
-								<circle cx="14" cy="14" r="1.5" fill="var(--coroa)"></circle>
-							</svg>
-						</span>
-
-						<span
-							class="absolute bottom-4 left-4 font-mono text-mono uppercase tracking-widest text-grafite/60 transition-colors group-hover:text-coroa"
-						>
-							{contato.ctaMapa}
-						</span>
-					</button>
-
-					<div id="mapa-iframe-wrap" class="hidden aspect-4/3 w-full">
-						<iframe
-							id="mapa-iframe"
-							class="h-full w-full border-0"
-							title={`Mapa com a localização da ${empresa.nome}`}
-							loading="lazy"
-							data-src={mapaEmbedUrl}></iframe>
-					</div>
+				<div class="mt-8 aspect-4/3 w-full border border-grafite/15">
+					<iframe
+						class="h-full w-full border-0"
+						title={`Mapa com a localização da ${empresa.nome}`}
+						loading="lazy"
+						src={mapaEmbedUrl}></iframe>
 				</div>
 			</div>
 		</div>
@@ -134,17 +98,6 @@ const mapaEmbedUrl = `https://www.google.com/maps?q=${encodeURIComponent(enderec
 </section>
 
 <script define:vars={{ whatsappOz: empresa.whatsapp }}>
-	const botaoMapa = document.getElementById('mapa-toggle');
-	const wrapMapa = document.getElementById('mapa-iframe-wrap');
-	const iframeMapa = document.getElementById('mapa-iframe');
-
-	botaoMapa?.addEventListener('click', () => {
-		const src = iframeMapa?.dataset.src;
-		if (iframeMapa && src) iframeMapa.src = src;
-		botaoMapa.classList.add('hidden');
-		wrapMapa?.classList.remove('hidden');
-	});
-
 	const formulario = document.getElementById('form-contato');
 	formulario?.addEventListener('submit', (evento) => {
 		evento.preventDefault();
@@ -155,7 +108,7 @@ const mapaEmbedUrl = `https://www.google.com/maps?q=${encodeURIComponent(enderec
 		const mensagem = String(dados.get('mensagem') ?? '').trim();
 
 		const linhas = [
-			'Olá! Vim pelo site da OZ Energia Solar.',
+			'Olá! Vim da seção Contato do site.',
 			'',
 			`Nome: ${nome}`,
 			`WhatsApp para contato: ${whatsappCliente}`,

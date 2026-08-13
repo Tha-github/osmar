@@ -3,16 +3,22 @@
  * Botão flutuante de WhatsApp, deliberadamente discreto: sem balão verde,
  * sem preenchimento de destaque — só um ícone monoline (o mesmo traço fino
  * usado nos ícones do rodapé) sobre um fundo neutro escuro.
+ *
+ * Diferente dos outros botões de WhatsApp do site (que já sabem de qual
+ * seção partem, porque vivem dentro dela), este é fixo na tela inteira —
+ * por isso detecta a seção mais visível no momento do clique via
+ * IntersectionObserver, para a mensagem sempre citar de onde o cliente veio.
  */
-import { linkWhatsapp } from '../lib/whatsapp';
+import { empresa } from '../data/empresa';
+import { secaoPorId } from '../lib/whatsapp';
 
-// Botão flutuante e persistente, não vinculado a uma seção específica —
-// por isso é a única exceção à regra global de citar o nome da seção.
-const href = linkWhatsapp('Olá! Vim pelo site da OZ Energia Solar.');
+const mensagemPadrao = encodeURIComponent(`Olá! Vim da seção ${secaoPorId.inicio} do site e quero saber mais.`);
+const hrefPadrao = `https://wa.me/55${empresa.whatsapp}?text=${mensagemPadrao}`;
 ---
 
 <a
-	href={href}
+	id="whatsapp-flutuante"
+	href={hrefPadrao}
 	target="_blank"
 	rel="noopener noreferrer"
 	aria-label="Falar no WhatsApp com a OZ Energia Solar"
@@ -31,3 +37,31 @@ const href = linkWhatsapp('Olá! Vim pelo site da OZ Energia Solar.');
 			stroke-linecap="round"></path>
 	</svg>
 </a>
+
+<script define:vars={{ whatsappNumero: empresa.whatsapp, secoesPorId: secaoPorId }}>
+	const botao = document.getElementById('whatsapp-flutuante');
+
+	const secoes = Object.keys(secoesPorId)
+		.map((id) => document.getElementById(id))
+		.filter((el) => el !== null);
+
+	function definirSecaoAtual(nomeSecao) {
+		const mensagem = `Olá! Vim da seção ${nomeSecao} do site e quero saber mais.`;
+		botao.href = `https://wa.me/55${whatsappNumero}?text=${encodeURIComponent(mensagem)}`;
+	}
+
+	const observer = new IntersectionObserver(
+		(entries) => {
+			const maisVisivel = entries
+				.filter((entrada) => entrada.isIntersecting)
+				.sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+			if (maisVisivel) {
+				definirSecaoAtual(secoesPorId[maisVisivel.target.id]);
+			}
+		},
+		{ threshold: [0.25, 0.5, 0.75] },
+	);
+
+	secoes.forEach((secao) => observer.observe(secao));
+</script>

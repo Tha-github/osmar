@@ -26,10 +26,8 @@ export const manutencao = {
   clausula: {
     numero: 'Cláusula 2.3',
     titulo: 'Garantia de geração',
-    // Regra global da garantia: explicitar a dependência do contrato de
-    // monitoramento e manutenção nesta cláusula, que é a própria fonte da garantia.
     texto:
-      'Se a geração de um mês ficar abaixo do previsto por falha comprovada da OZ — projeto, instalação ou manutenção —, pagamos a diferença entre a energia prevista e a gerada, pela tarifa vigente da distribuidora. Válida para clientes com este contrato de monitoramento e manutenção em vigor.',
+      'A OZ Energia Solar é responsável por arcar com valores de contas muito altas em caso de descuido comprovado e por não ter apontado ao cliente as falhas do sistema. Ressaltamos que é obrigação do cliente manter os meios de comunicação sempre atualizados e responder aos comunicados em tempo hábil.',
   },
   cta: {
     label: 'Falar sobre monitoramento',

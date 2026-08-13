@@ -14,3 +14,22 @@ export function mensagemSecao(secao: string): string {
 export function linkWhatsapp(mensagem: string): string {
   return `https://wa.me/55${empresa.whatsapp}?text=${encodeURIComponent(mensagem)}`;
 }
+
+/**
+ * Nome de exibição de cada seção, indexado pelo id do <section> na página —
+ * usado pelo botão flutuante para saber de qual seção o visitante partiu
+ * (ele não pertence a uma seção fixa, então detecta por scroll).
+ */
+export const secaoPorId: Record<string, string> = {
+  inicio: 'Início',
+  garantia: 'Garantia',
+  argumentos: 'Retorno do investimento',
+  'como-funciona': 'Como funciona',
+  manutencao: 'Monitoramento e manutenção',
+  simulador: 'Simulador',
+  'formas-de-pagamento': 'Formas de pagamento',
+  'para-quem': 'Para quem',
+  sobre: 'Sobre',
+  faq: 'Perguntas frequentes',
+  contato: 'Contato',
+};
