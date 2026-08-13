@@ -15,7 +15,7 @@
 import { Image } from 'astro:assets';
 import { comoFunciona } from '../data/comoFunciona';
 import { linkWhatsapp, mensagemSecao } from '../lib/whatsapp';
-import fotoInstalacao from '../assets/para-quem/instalacao.png';
+import fotoInstalacao from '../assets/para-quem/instalacao.jpg';
 
 const whatsappHref = linkWhatsapp(mensagemSecao('Como funciona'));
 ---
@@ -59,8 +59,8 @@ const whatsappHref = linkWhatsapp(mensagemSecao('Como funciona'));
 					<Image
 						src={fotoInstalacao}
 						alt="Equipe técnica instalando painéis solares no telhado de um imóvel"
-						width={900}
-						height={424}
+						width={800}
+						height={1200}
 						loading="lazy"
 						format="avif"
 						class="h-full w-full object-cover"
